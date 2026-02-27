@@ -1,0 +1,8 @@
+.admin-container {
+  padding: 40px;
+  border: 4px solid #ff4d4d;
+  background-color: #fff5f5;
+  min-height: 100vh;
+}
+.admin-title { color: #d32f2f; font-size: 2rem; }
+.logout-btn { margin-top: 20px; padding: 10px 20px; cursor: pointer; }

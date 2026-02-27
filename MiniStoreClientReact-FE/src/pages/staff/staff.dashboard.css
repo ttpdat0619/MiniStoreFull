@@ -1,0 +1,7 @@
+.staff-container {
+  padding: 40px;
+  border: 4px solid #43a047;
+  background-color: #f1f8e9;
+  min-height: 100vh;
+}
+.staff-title { color: #1b5e20; font-size: 2rem; }

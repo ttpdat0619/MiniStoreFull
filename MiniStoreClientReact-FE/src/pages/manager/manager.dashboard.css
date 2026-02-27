@@ -1,0 +1,7 @@
+.manager-container {
+  padding: 40px;
+  border: 4px solid #1e88e5;
+  background-color: #f0f7ff;
+  min-height: 100vh;
+}
+.manager-title { color: #0d47a1; font-size: 2rem; }
