@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { isFuzzyMatch } from '../../helpers/search.helper';
 
-const SearchableSelect = ({ items, value, onChange, placeholder = "-- Select Product --" }) => {
+const SearchableSelect = ({ items, value, onChange, excludedIds = [], placeholder = "-- Select Product --" }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
@@ -8,29 +9,16 @@ const SearchableSelect = ({ items, value, onChange, placeholder = "-- Select Pro
     // Tìm sản phẩm đang được chọn để hiển thị tên lên ô input
     const selectedItem = items.find(i => i.ItemID === value);
 
-    // --- LINH HỒN CỦA THỬ THÁCH: HÀM XỬ LÝ CHUỖI ---
-    const removeAccents = (str) => {
-        if (!str) return "";
-        return str.normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "") // Tách dấu ra khỏi chữ và xóa đi
-            .replace(/đ/g, "d").replace(/Đ/g, "D"); // Xử lý riêng chữ đ
-    };
+    // Filter sản phẩm dựa trên fuzzy matching và exclude những cái đã chọn ở hàng khác
+    const filteredItems = items.filter(item => {
+        // 1. Kiểm tra fuzzy match
+        const matchesSearch = isFuzzyMatch(item.ItemName, searchTerm);
 
-    // Hàm tìm kiếm gần đúng (Fuzzy Match - Subsequence)
-    const fuzzyMatch = (query, target) => {
-        query = removeAccents(query.toLowerCase());
-        target = removeAccents(target.toLowerCase());
+        // 2. Kiểm tra xem có bị exclude không (trừ chính nó đang được chọn ở ô này)
+        const isExcluded = excludedIds.includes(item.ItemID) && item.ItemID !== value;
 
-        let i = 0, j = 0;
-        while (i < query.length && j < target.length) {
-            if (query[i] === target[j]) i++;
-            j++;
-        }
-        return i === query.length;
-    };
-
-    // Filter sản phẩm dựa trên fuzzy matching
-    const filteredItems = items.filter(item => fuzzyMatch(searchTerm, item.ItemName));
+        return matchesSearch && !isExcluded;
+    });
 
     // Xử lý click ra ngoài thì đóng dropdown
     useEffect(() => {
@@ -119,14 +107,34 @@ const SearchableSelect = ({ items, value, onChange, placeholder = "-- Select Pro
                                 onClick={() => handleSelect(item)}
                                 className="search-item-option"
                                 style={{
-                                    padding: '10px',
+                                    padding: '10px 15px',
                                     cursor: 'pointer',
                                     fontSize: '13px',
                                     color: 'var(--text-main)',
-                                    borderBottom: '1px solid rgba(255,255,255,0.05)'
+                                    borderBottom: '1px solid rgba(255,255,255,0.05)',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: '2px'
                                 }}
                             >
-                                <strong style={{ fontWeight: 'bold' }}>{item.ItemName}</strong>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <strong style={{ fontWeight: 'bold', color: '#007bff' }}>{item.ItemName}</strong>
+                                    <span style={{
+                                        fontSize: '11px',
+                                        background: 'rgba(0,123,255,0.1)',
+                                        color: '#007bff',
+                                        padding: '1px 6px',
+                                        borderRadius: '4px',
+                                        fontWeight: 'bold'
+                                    }}>
+                                        {item.unit?.UnitName || 'pc'}
+                                    </span>
+                                </div>
+                                {item.Description && (
+                                    <span style={{ fontSize: '11px', color: '#888', fontStyle: 'italic', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                        {item.Description}
+                                    </span>
+                                )}
                             </div>
                         ))
                     ) : (
@@ -139,7 +147,13 @@ const SearchableSelect = ({ items, value, onChange, placeholder = "-- Select Pro
             <style>{`
                 .search-item-option:hover { 
                     background: #007bff !important; 
-                    color: white !important; 
+                }
+                .search-item-option:hover strong,
+                .search-item-option:hover span {
+                    color: white !important;
+                }
+                .search-item-option:hover .unit-badge {
+                    background: rgba(255, 255, 255, 0.2) !important;
                 }
             `}</style>
         </div>

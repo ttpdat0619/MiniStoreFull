@@ -5,14 +5,25 @@ export const createImport = async (req, res) => {
     try {
         const { items } = req.body;
 
-        //Take UserID from Middle verifyToken
+        //Take UserID and BranchID from Middle verifyToken
         const managerId = req.user.UserID;
+        const userRole = req.user.RoleName;
+        let branchId = req.user.BranchID;
 
-        if (!items || !Array.isArray(items) || items.length === 0) {
-            return res.status(400).json({ message: "Item List connot be empty" });
+        // If user is Admin, they can specify branchId in the body
+        if (userRole === 'Admin') {
+            if (req.body.branchId) {
+                branchId = req.body.branchId;
+            } else {
+                return res.status(400).json({ message: "Admin must provide branchId to create request" });
+            }
         }
 
-        const data = await purchaseRequestService.createRequest(managerId, items);
+        if (!items || !Array.isArray(items) || items.length === 0) {
+            return res.status(400).json({ message: "Item List cannot be empty" });
+        }
+
+        const data = await purchaseRequestService.createRequest(managerId, items, branchId);
 
         return res.status(201).json({
             message: "Purchase request create success!",
@@ -92,11 +103,12 @@ export const deleteRequest = async (req, res) => {
 //==========CONTROLLER TO GET ALL PURCHASE REQUEST==========
 export const getAllRequestInput = async (req, res) => {
     try {
-        //Take UserID and RoleName form Middleware
+        //Take UserID, RoleName and BranchID form Middleware
         const userId = req.user.UserID;
         const userRole = req.user.RoleName;
+        const branchId = req.user.BranchID;
 
-        const data = await purchaseRequestService.getAllRequests(userId, userRole);
+        const data = await purchaseRequestService.getAllRequests(userId, userRole, branchId);
         return res.status(200).json({
             message: "Get all purchase request success!",
             data: data

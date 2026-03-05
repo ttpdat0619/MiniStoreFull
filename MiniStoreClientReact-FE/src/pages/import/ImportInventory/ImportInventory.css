@@ -8,11 +8,9 @@
 
 .import-content-wrapper {
     max-width: 900px;
-    /* Nhỏ gọn lại */
     margin: 0 auto;
 }
 
-/* Tab Switching */
 .import-tabs {
     display: flex;
     border-bottom: 2px solid #333;
@@ -38,7 +36,6 @@
     border-color: #007bff;
 }
 
-/* List Items */
 .import-list {
     display: flex;
     flex-direction: column;
@@ -54,28 +51,68 @@
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s;
+}
+
+.import-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .import-info h4 {
     margin: 0;
-    font-size: 17px;
+    font-size: 16px;
     color: #007bff;
+    line-height: 1;
+}
+
+.import-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.import-id-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .import-info p {
-    margin: 6px 0 0;
-    font-size: 14px;
-    color: #555;
+    margin: 8px 0 0;
+    font-size: 13px;
+    color: #666;
 }
 
 .status-tag {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: bold;
-    margin-left: 10px;
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
     text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.branch-tag {
+    font-size: 11px;
+    background: #f0f4f8;
+    color: #334e68;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-weight: 700;
+    border: 1px solid #d9e2ec;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+[data-theme='dark'] .branch-tag {
+    background: #1a2a3a;
+    color: #a0c0e0;
+    border-color: #2a3a4a;
 }
 
 .status-pending {
@@ -95,14 +132,14 @@
 
 .import-actions {
     display: flex;
-    gap: 20px;
+    gap: 15px;
 }
 
 .btn-icon {
     background: none;
     border: none;
     cursor: pointer;
-    font-size: 20px;
+    font-size: 18px;
     padding: 5px;
     transition: transform 0.2s;
 }
@@ -111,7 +148,6 @@
     transform: scale(1.2);
 }
 
-/* Nút tạo đơn ở góc dưới */
 .btn-create-floating {
     position: fixed;
     right: 50px;
@@ -126,6 +162,7 @@
     cursor: pointer;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
     transition: all 0.3s;
+    z-index: 100;
 }
 
 .btn-create-floating:hover {
@@ -133,72 +170,18 @@
     color: white;
 }
 
-/* Back Button Styles */
-.btn-back {
-    background: #f8f9fa;
-    color: #333;
-    border: 1px solid #dee2e6;
-    padding: 8px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.2s;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.btn-back:hover {
-    background: #e9ecef;
-    border-color: #adb5bd;
-    transform: translateX(-3px);
-}
-
-[data-theme='dark'] .btn-back {
-    background: #2d2d2d;
-    color: #f8f9fa;
-    border-color: #444;
-}
-
-[data-theme='dark'] .btn-back:hover {
-    background: #3d3d3d;
-    border-color: #555;
-}
-
-/* Detail Page Specifics */
-.detail-header {
+/* Dark mode adjustments for cards */
+[data-theme='dark'] .import-card {
     background: var(--bg-card);
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    color: var(--text-main);
     border: 1px solid var(--border-color);
-    margin-bottom: 25px;
 }
 
-.item-table-container {
+[data-theme='dark'] .import-info p {
+    color: var(--text-sub);
+}
+
+[data-theme='dark'] .btn-create-floating {
     background: var(--bg-card);
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    border: 1px solid var(--border-color);
-}
-
-.item-table-container th {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.item-table-container td {
-    border-color: rgba(255, 255, 255, 0.05) !important;
-}
-
-[data-theme='light'] .item-table-container td {
-    border-color: #eee !important;
-}
-
-.detail-actions .tab-item {
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
+    color: var(--text-main);
 }

@@ -44,6 +44,11 @@ export const UserEntity = new EntitySchema({
         CreateAt: {
             type: "datetime",
             createDate: true
+        },
+        BranchID: {
+            type: "varchar",
+            length: 200,
+            nullable: true
         }
     },
     relations: {
@@ -52,6 +57,12 @@ export const UserEntity = new EntitySchema({
             type: "many-to-one",
             joinColumn: { name: "RoleID" },
             eager: true // Auto load role when fetching user
+        },
+        branch: {
+            target: "Branch",
+            type: "many-to-one",
+            joinColumn: { name: "BranchID" },
+            eager: true
         }
     }
 });

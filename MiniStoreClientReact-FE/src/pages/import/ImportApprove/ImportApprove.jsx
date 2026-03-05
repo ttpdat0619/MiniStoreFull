@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import importApi from '../../api/import.api';
-import './import.Page.css';
+import importApi from '../../../api/import.api';
+import './ImportApprove.css';
 
 const ImportApprove = () => {
     const { id } = useParams();
@@ -88,10 +88,19 @@ const ImportApprove = () => {
             <div className="import-content-wrapper detail-page">
                 <button className="btn-back" onClick={() => navigate(`/import/detail/${id}`)}>← BACK TO DETAIL</button>
 
-                <div className="detail-header" style={{ marginTop: '20px', textAlign: 'center', background: 'var(--bg-card)', padding: '30px' }}>
-                    <h2 style={{ color: '#007bff' }}>PROCESS IMPORT REQUEST</h2>
-                    <p>Order: <strong>#{String(request.RequestID || id).substring(0, 8).toUpperCase()}</strong></p>
-                    <p>Status: <span className="status-tag status-pending">PENDING</span></p>
+                <div className="detail-header" style={{ marginTop: '20px', background: 'var(--bg-card)', padding: '25px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div style={{ textAlign: 'left' }}>
+                            <h2 style={{ color: '#007bff', margin: 0 }}>PROCESS IMPORT REQUEST</h2>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '10px' }}>
+                                <span style={{ fontSize: '14px' }}>Order: <strong>#{String(request.RequestID || id).substring(0, 8).toUpperCase()}</strong></span>
+                                <span className="branch-tag" style={{ border: '1px solid #d9e2ec' }}>
+                                    📍 {request.branch?.BranchName}
+                                </span>
+                            </div>
+                        </div>
+                        <span className="status-tag status-pending" style={{ fontSize: '14px', padding: '6px 16px' }}>PENDING</span>
+                    </div>
                 </div>
 
                 {!isRejecting ? (

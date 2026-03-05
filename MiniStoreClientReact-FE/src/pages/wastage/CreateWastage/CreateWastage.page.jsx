@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./CreateWastage.page.css";
 import itemApi from "../../../api/item.api";
 import wastageApi from "../../../api/wastage.api";
+import branchApi from "../../../api/branch.api";
 import SearchableSelect from "../../../components/common/SearchableSelect";
 
 const CreateWastage = () => {
@@ -12,16 +13,31 @@ const CreateWastage = () => {
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({}); // Track validation errors: { rowId: { field: true } }
 
+    // Branch management
+    const [branches, setBranches] = useState([]);
+    const [selectedBranchId, setSelectedBranchId] = useState('');
+    const [currentUser, setCurrentUser] = useState(null);
+
     useEffect(() => {
-        const loadItems = async () => {
+        const user = JSON.parse(localStorage.getItem('currentUser'));
+        setCurrentUser(user);
+
+        const loadInitialData = async () => {
             try {
                 const res = await itemApi.getAllItem();
                 setAllItems(res.data.data || []);
+
+                if (user?.RoleName === 'Admin') {
+                    const branchRes = await branchApi.getAll();
+                    setBranches(branchRes.data.data || branchRes.data);
+                } else if (user?.BranchID) {
+                    setSelectedBranchId(user.BranchID);
+                }
             } catch (err) {
-                console.error("Load items error:", err);
+                console.error("Load initial data error:", err);
             }
         };
-        loadItems();
+        loadInitialData();
     }, []);
 
     const handleAddRow = () => {

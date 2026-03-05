@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import importApi from '../../api/import.api';
-import './import.Page.css';
+import importApi from '../../../api/import.api';
+import './ImportDetail.css';
 
 
 
@@ -67,9 +67,14 @@ const ImportDetail = () => {
                 <button className="btn-back" onClick={() => navigate('/import')}>← BACK TO LIST</button>
 
                 <div className="detail-header" style={{ marginTop: '20px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <div>
-                            <h2 style={{ margin: 0 }}>ORDER #{String(request.RequestID || id).substring(0, 8).toUpperCase()}</h2>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                                <h2 style={{ margin: 0 }}>ORDER #{String(request.RequestID || id).substring(0, 8).toUpperCase()}</h2>
+                                <span className="branch-tag" style={{ border: '1px solid #d9e2ec' }}>
+                                    📍 {request.branch?.BranchName || '---'}
+                                </span>
+                            </div>
                             <p style={{ color: 'var(--text-sub)', fontSize: '13px', margin: '5px 0' }}>Created on: {request.CreateAt ? new Date(request.CreateAt).toLocaleString() : '---'}</p>
                             {request.ApprovalDate && !isPending && (
                                 <p style={{ color: '#28a745', fontSize: '13px', margin: '5px 0', fontWeight: 'bold' }}>
@@ -77,7 +82,7 @@ const ImportDetail = () => {
                                 </p>
                             )}
                         </div>
-                        <span className={`status-tag status-${request.status?.StatusName.toLowerCase()}`} style={{ fontSize: '16px', padding: '8px 20px' }}>
+                        <span className={`status-tag status-${request.status?.StatusName.toLowerCase()}`} style={{ fontSize: '14px', padding: '6px 16px' }}>
                             {request.status?.StatusName}
                         </span>
                     </div>
@@ -96,6 +101,7 @@ const ImportDetail = () => {
                     <div className="detail-section card" style={{ padding: '20px', background: 'var(--bg-card)', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
                         <h4 style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '10px', marginBottom: '15px', color: '#007bff' }}>SUMMARY</h4>
                         <p><strong>Total Items:</strong> {request.details?.length}</p>
+                        <p><strong>Branch:</strong> <span style={{ color: '#28a745', fontWeight: 'bold' }}>{request.branch?.BranchName || '---'}</span></p>
                         <p><strong>Request ID:</strong> <small>{request.RequestID}</small></p>
                     </div>
                 </div>

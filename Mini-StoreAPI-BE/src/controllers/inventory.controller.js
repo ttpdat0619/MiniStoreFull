@@ -2,7 +2,10 @@ import * as inventoryService from "../services/inventory.service.js";
 
 export const getAll = async (req, res) => {
     try {
-        const data = await inventoryService.getAllInventory();
+        // Admins can specify branchId in query, Managers/Staff use their own BranchID
+        const branchId = req.user.RoleName === 'Admin' ? req.query.branchId : req.user.BranchID;
+
+        const data = await inventoryService.getAllInventory(branchId);
         return res.status(200).json({
             message: "Get inventory list successfully",
             data: data
@@ -15,7 +18,9 @@ export const getAll = async (req, res) => {
 
 export const getLowStock = async (req, res) => {
     try {
-        const data = await inventoryService.getLowStock();
+        const branchId = req.user.RoleName === 'Admin' ? req.query.branchId : req.user.BranchID;
+
+        const data = await inventoryService.getLowStock(branchId);
         return res.status(200).json({
             message: "Get Low Stock Items Success!",
             data: data

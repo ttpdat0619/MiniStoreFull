@@ -6,6 +6,12 @@ use chickenstore;
 # Group for user
 ##########
 
+CREATE TABLE Branches (
+    BranchID varchar(200) PRIMARY KEY, #Using UUIDv7
+    BranchName varchar(200),
+    Address varchar(555)
+);
+
 #Table Roles
 Create Table Roles
 (
@@ -17,7 +23,8 @@ Create Table Roles
 #Table User
 Create Table Users
 (
-		UserID varchar(200) primary key, #Using UUIDv7
+		UserID varchar(200) primary key, #Using UUIDv7,
+        BranchID varchar(200), foreign key (BranchID) references Branches,
         Username varchar(50),
         PhoneNumber varchar(20),
         PasswordHash varchar(555),
@@ -25,6 +32,7 @@ Create Table Users
         IsActive bit default 1,
         CreateAt datetime default current_timestamp
 );
+
 
 #Table Profile for User
 Create Table UserProfiles
@@ -41,6 +49,8 @@ Create Table UserProfiles
 # Inventory Manager
 ##########
 
+
+
 #Table Units
 Create Table Units
 (
@@ -54,13 +64,16 @@ Create Table Items
 	ItemID varchar(200) primary key,
     ItemName varchar(200),	
     UnitID varchar(200), foreign key (UnitID) references Units (UnitID),
-    Quantity decimal (18,2) default 0
+    Quantity decimal (18,2) default 0,
+    Description varchar(200)
 );
 
 Create Table Inventories
 (
-	InvetoryID varchar(200) primary key,
+	InventoryID varchar(200) primary key,
     ItemID varchar(200), foreign key (ItemID) references Items (ItemID),
+    BranchID varchar(200), foreign key (BranchID) references Braches (BranchID),
+    InventoryName varchar(200),
     StockQuantity decimal(18, 2) default 0,
     MinQuantity decimal (18, 2) default 0,
     LastUpdatedAt datetime default current_timestamp on update current_timestamp
@@ -81,9 +94,11 @@ Create Table PurchaseRequests
     ManagerID varchar(200), foreign key (ManagerID) references Users (UserID),
     ApproverID varchar(200), foreign key (ApproverID) references Users (UserID),
     StatusID varchar(200), foreign key (StatusID) references ImportStatus (StatusID),
-    CraeteAt datetime default current_timestamp,
+    BranchID varchar(200), foreign key (BranchID) references Branches (BranchID),
+    CreateAt datetime default current_timestamp,
     TotalCost decimal (18, 2),
-    RejectionReason text
+    RejectionReason text,
+    ApprovalDate datetime default current_timestamp
 );
 
 #Detail of ingredients in the input form
@@ -103,8 +118,10 @@ Create Table WastageRequests
     RequesterID varchar(200), foreign key (RequesterID) references Users (UserID),
     ApproverID varchar(200), foreign key (ApproverID) references Users(UserID),
     StatusID varchar(200), foreign key (StatusID) references ImportStatus (StatusID),
+    BranchID varchar(200), foreign key (BranchID) references Branches (BranchID),
     CreateAt datetime default current_timestamp,
-    Reason text
+    Reason text,
+    ApprovalDate datetime default current_timestamp
 );
 
 #Detaill in Wastage form
@@ -114,7 +131,36 @@ Create Table WastageDetails
     WastageID varchar(200), foreign key (WastageID) references WastageRequests (WastageID),
     ItemID varchar(200), foreign key (ItemID) references Items (ItemID),
     Quantity decimal (18,2),
-    WastageReason text
+    WastageReason text,
+    WastagePicture varchar(555)
+);
+
+#Internal Transfers
+Create Table InternalTransfers
+(
+	TransferID varchar(200) primary key, #Using UUIDv7
+    FromBranchID varchar(200), foreign key (FromBranchID) references Branches (BranchID),
+    ToBranchID varchar(200), foreign key (ToBranchID) references Branches (BranchID),
+    SenderID varchar(200), foreign key (SenderID) references Users (UserID),
+    RecceiverID varchar(200), foreign key (RecceiverID) references Users (UserID),
+    ApproverID varchar(200), foreign key (ApproverID) references Users(UserID),
+    ReceivingStatus varchar(200), foreign key (ReceivingStatus) references ImportStatus (StatusID),
+    ApproveStatus varchar(200), foreign key (ApproveStatus) references ImportStatus (StatusID),
+    SentDate datetime DEFAULT CURRENT_TIMESTAMP,
+    ReceivedDate datetime,
+    ApprovedDate datetime,
+    SendNote text,
+    ReceivedNote text,
+    AdminNote text
+);
+
+#Table to get Detail of Transfers
+Create Table TransferDetails
+(
+	DetailID varchar(200) primary key,
+    TransferID varchar(200), foreign key (TransferID) references InternalTransfers (TransferID),
+    ItemID varchar(200), foreign key (ItemID) references Items(ItemID),
+    Quantity decimal(18, 2)
 );
 
 ##########
@@ -146,6 +192,34 @@ Create Table Formulas
     FoodID varchar(200), foreign key (FoodID) references FoodItems (FoodID),
     ItemID varchar(200), foreign key (ItemID) references Items (ItemID),
     QuantityUsed decimal(18, 2)
+);
+
+CREATE TABLE FoodOptions (
+	OptionID VARCHAR(200) PRIMARY KEY,
+	OptionName VARCHAR(200), -- VD: Xốt mắm tỏi, Xốt cay, Xốt phô mai
+	ExtraPrice DECIMAL(18, 2) DEFAULT 0, -- Giá cộng thêm nếu có (VD: +5000đ)
+    QuantityUsed decimal (18,2),
+	ItemID VARCHAR(200), -- Liên kết tới bảng Items để trừ kho nguyên liệu xốt
+	FOREIGN KEY (ItemID) REFERENCES Items(ItemID)
+);
+
+CREATE TABLE FoodItem_Options (
+    FoodID VARCHAR(200),
+    OptionID VARCHAR(200),
+    PRIMARY KEY (FoodID, OptionID),
+    FOREIGN KEY (FoodID) REFERENCES FoodItems(FoodID),
+    FOREIGN KEY (OptionID) REFERENCES FoodOptions(OptionID)
+);
+
+CREATE TABLE PackagingRules (
+    RuleID varchar(200) primary key,
+    FoodID varchar(200),     -- Mì ý hoặc Gà
+    ItemID varchar(200),     -- ID của cái Hộp hoặc Giấy gói
+    MinQuantity int,         -- Số lượng món khách mua từ...
+    MaxQuantity int,         -- ...đến
+    PackQuantity decimal(18, 2), -- Số lượng bao bì sẽ bị trừ thực tế
+    FOREIGN KEY (FoodID) REFERENCES FoodItems(FoodID),
+    FOREIGN KEY (ItemID) REFERENCES Items(ItemID)
 );
 
 #Table define combo and food item in this combo
@@ -195,6 +269,14 @@ Create Table StatusOrders
     StatusName varchar(200)
 );
 
+#Table to Detifine Type of Order
+Create Table OrderTypes
+(
+	TypeID varchar(200) primary key,
+    TypeName varchar(100),
+    Descripion varchar(200)
+);
+
 #Table for Orders
 Create Table Orders
 (
@@ -202,6 +284,8 @@ Create Table Orders
     CustomerID varchar(200), foreign key (CustomerID) references Users (UserID),
     TicketCouponID varchar(200), foreign key (TicketCouponID) references Coupons (CouponID),
     StatusID varchar(200), foreign key (StatusID) references StatusOrders (StatusID),
+    TypeID varchar(200), foreign key (TypeID) references OrderTypes (TypeID),
+    BranchID varchar(200), foreign key (BranchID) references Braches (BranchID),
     TotalAmount decimal (18, 2),
     CreateAt datetime default current_timestamp
 );
@@ -221,10 +305,10 @@ Create Table OrderDatails
 	DetailID varchar(200) primary key,
     OrderID varchar(200), foreign key (OrderID) references Orders (OrderID),
     FoodID varchar(200), foreign key (FoodID) references FoodItems (FoodID),
+    OptionID varchar(200), foreign key (OptionID) references FoodOptions(OptionID),
     Quantity int,
     UnitPrice decimal (18, 2)
 );
-
 
 ##########
 #Table to get activity log 
@@ -238,4 +322,7 @@ Create Table ActivityLogs
     TargetName varchar(200),
     TimeStamp datetime default current_timestamp
 );
+
+
+
 

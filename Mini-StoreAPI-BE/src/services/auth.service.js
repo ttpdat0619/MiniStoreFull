@@ -35,7 +35,8 @@ export const login = async (username, password) => {
         UserID: user.UserID,
         Username: user.Username,
         RoleID: user.RoleID,
-        RoleName: user.role ? user.role.RoleName : "Unknown"
+        RoleName: user.role ? user.role.RoleName : "Unknown",
+        BranchID: user.BranchID // Added BranchID to JWT Payload
     };
 
     const token = jwt.sign(

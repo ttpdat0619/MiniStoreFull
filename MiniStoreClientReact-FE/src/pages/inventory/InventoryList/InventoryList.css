@@ -1,4 +1,4 @@
-/* Container chính */
+/* InventoryList.css */
 .inventory-container {
     padding: 20px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -6,7 +6,6 @@
     margin: 0 auto;
 }
 
-/* Header trang (Chữ trắng để nổi trên nền tối) */
 .inventory-header {
     text-align: center;
     color: #ecf0f1;
@@ -16,17 +15,10 @@
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
 
-.inventory-header.warning {
-    color: #ff6b6b;
-    /* Màu đỏ sáng cho trang Low Stock */
-}
-
-/* Bảng dữ liệu (Nền trắng - Chữ đen) */
 .inventory-table {
     width: 100%;
     border-collapse: collapse;
     background-color: #ffffff;
-    /* NỀN TRẮNG */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
     border-radius: 8px;
     overflow: hidden;
@@ -44,7 +36,6 @@
     text-align: left;
     border-bottom: 1px solid #ddd;
     color: #333333;
-    /* CHỮ ĐEN (Quan trọng để nhìn thấy trên nền trắng) */
 }
 
 .inventory-table th {
@@ -53,15 +44,12 @@
     font-size: 0.85rem;
     letter-spacing: 0.5px;
     color: #ffffff;
-    /* Chữ tiêu đề bảng vẫn là trắng */
 }
 
 .inventory-table tbody tr:hover {
     background-color: #f1f1f1;
-    /* Hover màu xám nhạt */
 }
 
-/* Tiện ích màu sắc số lượng */
 .text-center {
     text-align: center !important;
 }
@@ -69,31 +57,12 @@
 .stock-number {
     font-weight: bold;
     color: #27ae60;
-    /* Xanh lá */
 }
 
-.stock-critical {
-    color: #c0392b;
-    /* Đỏ đậm */
-    font-weight: bold;
-}
-
-.badge-warning {
-    background-color: #fce4ec;
-    color: #c0392b;
-    padding: 5px 10px;
-    border-radius: 12px;
-    font-size: 0.8rem;
-    font-weight: bold;
-    display: inline-block;
-}
-
-/* Trạng thái Loading / No Data */
 .loading-state,
 .no-data {
     text-align: center;
     padding: 40px;
     color: #ecf0f1;
-    /* Chữ trắng cho thông báo */
     font-style: italic;
 }

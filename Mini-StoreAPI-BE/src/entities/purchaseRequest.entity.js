@@ -37,6 +37,11 @@ export const purchaseRequestEntity = new EntitySchema({
         ApprovalDate: {
             type: "datetime",
             createDate: true
+        },
+        BranchID: {
+            type: "varchar",
+            length: 200,
+            nullable: true
         }
     },
     relations: {
@@ -64,6 +69,11 @@ export const purchaseRequestEntity = new EntitySchema({
             type: "many-to-one",
             joinColumn: { name: "StatusID" },
             eager: true
+        },
+        branch: {
+            target: "Branch",
+            type: "many-to-one",
+            joinColumn: { name: "BranchID" }
         }
     }
 });

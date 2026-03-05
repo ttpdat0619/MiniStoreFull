@@ -1,25 +1,45 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"
-import './import.Page.css';
-import itemApi from "../../api/item.api";
-import importApi from "../../api/import.api";
-import SearchableSelect from "../../components/common/SearchableSelect";
+import './CreateImport.css';
+import itemApi from "../../../api/item.api";
+import importApi from "../../../api/import.api";
+import branchApi from "../../../api/branch.api";
+import SearchableSelect from "../../../components/common/SearchableSelect";
 
 const CreateImport = () => {
     const navigate = useNavigate();
     const [items, setItems] = useState([]);
-    const [selectedItems, setSelectedItems] = useState([]); // Khởi đầu là mảng rỗng theo yêu cầu
+    const [selectedItems, setSelectedItems] = useState([]);
+
+    // Quản lý chi nhánh cho Admin
+    const [branches, setBranches] = useState([]);
+    const [selectedBranchId, setSelectedBranchId] = useState('');
+    const [currentUser, setCurrentUser] = useState(null);
 
     useEffect(() => {
-        const loadItems = async () => {
+        // Lấy thông tin user để phân quyền
+        const user = JSON.parse(localStorage.getItem('currentUser'));
+        setCurrentUser(user);
+
+        const loadInitialData = async () => {
             try {
-                const res = await itemApi.getAllItem();
-                setItems(res.data.data || []);
+                // Load danh sách items
+                const itemRes = await itemApi.getAllItem();
+                setItems(itemRes.data.data || []);
+
+                // Nếu là Admin thì load thêm danh sách chi nhánh
+                if (user?.RoleName === 'Admin') {
+                    const branchRes = await branchApi.getAll();
+                    setBranches(branchRes.data.data || branchRes.data);
+                } else if (user?.BranchID) {
+                    // Manager/Staff thì fix cứng chi nhánh theo User
+                    setSelectedBranchId(user.BranchID);
+                }
             } catch (err) {
-                console.error("Error When take Items: ", err);
+                console.error("Error loading initial data: ", err);
             }
         };
-        loadItems();
+        loadInitialData();
     }, []);
 
     const handleAddItem = () => {
@@ -54,13 +74,20 @@ const CreateImport = () => {
 
     const handleSendRequest = async () => {
         const validItems = selectedItems.filter(i => i.ItemID !== '');
+
         if (validItems.length === 0) {
             return alert("Please Select At Least 1 Product");
         }
 
+        // Kiểm tra chọn chi nhánh cho Admin
+        if (currentUser?.RoleName === 'Admin' && !selectedBranchId) {
+            return alert("Admin must select a Branch to import!");
+        }
+
         try {
             const payload = {
-                items: validItems.map(i => ({ ItemID: i.ItemID, Quantity: i.Quantity }))
+                items: validItems.map(i => ({ ItemID: i.ItemID, Quantity: i.Quantity })),
+                branchId: selectedBranchId // Gửi kèm branchId (BE controler sẽ xử lý dựa trên role)
             };
             await importApi.createPurchaseRequest(payload);
             alert("Create Request Success!");
@@ -77,6 +104,51 @@ const CreateImport = () => {
                 <h1 style={{ textAlign: 'center', margin: '20px 0', textTransform: 'uppercase', letterSpacing: '1px', fontSize: '24px' }}>
                     Create Import Request
                 </h1>
+
+                {/* Section chọn chi nhánh (Chỉ hiển thị cho Admin) */}
+                {currentUser?.RoleName === 'Admin' && (
+                    <div style={{
+                        background: 'var(--bg-card)',
+                        padding: '15px 20px',
+                        borderRadius: '12px',
+                        marginBottom: '20px',
+                        border: '1px solid var(--border-color)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '15px'
+                    }}>
+                        <label style={{ fontWeight: 'bold', fontSize: '14px', color: 'var(--text-main)' }}>IMPORT FOR BRANCH:</label>
+                        <select
+                            value={selectedBranchId}
+                            onChange={(e) => setSelectedBranchId(e.target.value)}
+                            style={{
+                                padding: '10px 15px',
+                                borderRadius: '8px',
+                                border: '1px solid var(--border-color)',
+                                backgroundColor: 'var(--bg-main)',
+                                color: 'var(--text-main)',
+                                flex: 1,
+                                maxWidth: '300px',
+                                outline: 'none'
+                            }}
+                        >
+                            <option value="">-- Choose Branch --</option>
+                            {branches.map(b => (
+                                <option key={b.BranchID} value={b.BranchID}>{b.BranchName}</option>
+                            ))}
+                        </select>
+                        <span style={{ fontSize: '12px', color: '#888' }}>(Admin only)</span>
+                    </div>
+                )}
+
+                {/* Hiển thị chi nhánh hiện tại cho Manager để rõ ràng */}
+                {currentUser?.RoleName !== 'Admin' && currentUser?.BranchID && (
+                    <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+                        <span className="branch-tag" style={{ border: '1px solid #d9e2ec', padding: '6px 16px', fontSize: '13px' }}>
+                            📍 Importing for branch: <strong>{currentUser.BranchID}</strong>
+                        </span>
+                    </div>
+                )}
 
                 <div className="import-list">
                     {selectedItems.length === 0 && (
@@ -123,6 +195,7 @@ const CreateImport = () => {
                                         items={items}
                                         value={row.ItemID}
                                         onChange={(val) => handleChangeItem(row.id, 'ItemID', val)}
+                                        excludedIds={selectedItems.map(i => i.ItemID).filter(id => id !== '')}
                                     />
                                 </div>
 
@@ -198,4 +271,5 @@ const CreateImport = () => {
         </div>
     );
 };
+
 export default CreateImport;

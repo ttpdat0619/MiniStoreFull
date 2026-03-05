@@ -32,6 +32,15 @@ export const InventoryEntity = new EntitySchema({
         LastUpdatedAt: {
             type: "datetime",
             updateDate: true
+        },
+        BranchID: {
+            type: "varchar",
+            length: 200,
+            nullable: true
+        },
+        InventoryName: {
+            type: "varchar",
+            length: 200
         }
     },
     relations: {
@@ -39,6 +48,12 @@ export const InventoryEntity = new EntitySchema({
             target: "Item",
             type: "one-to-one",
             joinColumn: { name: "ItemID" },
+            eager: true
+        },
+        branch: {
+            target: "Branch",
+            type: "many-to-one",
+            joinColumn: { name: "BranchID" },
             eager: true
         }
     }

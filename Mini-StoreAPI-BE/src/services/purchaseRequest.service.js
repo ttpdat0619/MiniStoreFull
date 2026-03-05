@@ -12,19 +12,19 @@ const logRepo = AppDataSource.getRepository(ActivityLogEntity);
 
 
 //=========GET ALL REQUESTS ==========
-export const getAllRequests = async (userId, userRole) => {
+export const getAllRequests = async (userId, userRole, branchId) => {
     //If not Admin just Fillter and take Purchase Inport By that Manager Create
-    const whereCondition = userRole === 'Admin' ? {} : { ManagerID: userId };
+    const whereCondition = userRole === 'Admin' ? {} : { BranchID: branchId };
 
     return await requestRepo.find({
         where: whereCondition,
-        relations: ["details", "details.item", "manager", "status"],
+        relations: ["details", "details.item", "manager", "status", "branch"],
         order: { CreateAt: "DESC" }
     });
 };
 
 //==========SERVICE TO CREATE REQUEST==========
-export const createRequest = async (managerId, items) => {
+export const createRequest = async (managerId, items, branchId) => {
 
     const pendingStatus = await getStatusByName("Pending");
 
@@ -40,6 +40,7 @@ export const createRequest = async (managerId, items) => {
     const newRequest = requestRepo.create({
         RequestID: requestId,
         ManagerID: managerId,
+        BranchID: branchId, // Added BranchID
         StatusID: pendingStatus.StatusID,
         details: details
     });
@@ -49,7 +50,7 @@ export const createRequest = async (managerId, items) => {
     const logEntry = logRepo.create({
         LogID: uuidv7(),
         UserID: managerId,
-        Action: 'Create a new purchase Request Items',
+        Action: 'Create a new purchase Request Items for Branch',
         TargetTable: "PurchaseRequests",
         TargetID: requestId,
         TargetName: "New Purchase Order"
@@ -69,7 +70,8 @@ export const getRequestById = async (requestId) => {
             "details.item.unit",
             "manager",
             "approver",
-            "status"
+            "status",
+            "branch"
         ]
     });
 };
@@ -213,8 +215,9 @@ export const processRequest = async (requestId, appoverId, action, reason = null
                 const itemMultiplier = detail.item?.Quantity || 1;
                 const totalAddedAmount = Number(detail.Quantity) * Number(itemMultiplier);
 
+                // Find inventory for THIS specific branch
                 const inventory = await transactionEntityManager.findOne(InventoryEntity, {
-                    where: { ItemID: detail.ItemID }
+                    where: { ItemID: detail.ItemID, BranchID: request.BranchID }
                 });
 
                 if (inventory) {
@@ -222,7 +225,22 @@ export const processRequest = async (requestId, appoverId, action, reason = null
                     inventory.LastUpdatedAt = new Date();
                     await transactionEntityManager.save(InventoryEntity, inventory);
                 } else {
-                    throw new Error(`Inventory not found for Item: ${detail.ItemID}`);
+                    // Search for any existing inventory for this item to copy MinQuantity (based on "Linh Xuân" or others)
+                    const existingInv = await transactionEntityManager.findOne(InventoryEntity, {
+                        where: { ItemID: detail.ItemID }
+                    });
+                    const templateMinQty = existingInv ? existingInv.MinQuantity : 0;
+
+                    // If no inventory record exists for this branch, create one:
+                    const newInventory = inventoryRepo.create({
+                        InventoryID: uuidv7(),
+                        ItemID: detail.ItemID,
+                        BranchID: request.BranchID,
+                        InventoryName: detail.item.ItemName,
+                        StockQuantity: totalAddedAmount,
+                        MinQuantity: templateMinQty
+                    });
+                    await transactionEntityManager.save(InventoryEntity, newInventory);
                 }
             }
         });

@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom"
-import './import.Page.css';
-import itemApi from "../../api/item.api";
-import importApi from "../../api/import.api";
-import SearchableSelect from "../../components/common/SearchableSelect";
+import './EditImport.css';
+import itemApi from "../../../api/item.api";
+import importApi from "../../../api/import.api";
+import SearchableSelect from "../../../components/common/SearchableSelect";
 
 const EditImport = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [items, setItems] = useState([]); // Danh sách gốc từ kho
     const [selectedItems, setSelectedItems] = useState([]); // Danh sách đang sửa
+    const [requestData, setRequestData] = useState(null); // Lưu thông tin đơn gốc
     const [loading, setLoading] = useState(true);
     const [currentUser, setCurrentUser] = useState(null);
 
@@ -34,12 +35,13 @@ const EditImport = () => {
                 // 3. Load chi tiết đơn hàng hiện tại
                 const cleanId = id?.replaceAll(' ', '-');
                 const importRes = await importApi.getDetail(cleanId);
-                const requestData = importRes.data.data;
+                const data = importRes.data.data;
+                setRequestData(data);
 
-                if (!requestData) throw new Error("Request data not found");
+                if (!data) throw new Error("Request data not found");
 
                 // 4. Map dữ liệu từ DB sang format của Form
-                const mappedItems = requestData.details.map(d => {
+                const mappedItems = data.details.map(d => {
                     const found = allItems.find(i => i.ItemID === d.ItemID);
                     return {
                         id: d.DetailID, // Dùng DetailID làm key tạm
@@ -120,9 +122,15 @@ const EditImport = () => {
                 <h1 style={{ textAlign: 'center', margin: '20px 0', textTransform: 'uppercase', letterSpacing: '1px', fontSize: '24px', color: '#007bff' }}>
                     Edit Import Request
                 </h1>
-                <p style={{ textAlign: 'center', color: 'var(--text-sub)', marginBottom: '30px' }}>
-                    Modifying Order: <strong>#{id.substring(0, 8).toUpperCase()}</strong>
-                </p>
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '15px', marginBottom: '30px', flexWrap: 'wrap' }}>
+                    <span style={{ fontSize: '14px', color: 'var(--text-sub)' }}>
+                        Modifying Order: <strong>#{id.substring(0, 8).toUpperCase()}</strong>
+                    </span>
+                    <span style={{ height: '15px', width: '1px', background: 'var(--border-color)' }}></span>
+                    <span className="branch-tag" style={{ border: '1px solid #d9e2ec' }}>
+                        📍 {requestData?.branch?.BranchName || 'Loading...'}
+                    </span>
+                </div>
 
                 <div className="import-list">
                     {selectedItems.map((row, index) => (
@@ -154,6 +162,7 @@ const EditImport = () => {
                                         items={items}
                                         value={row.ItemID}
                                         onChange={(val) => handleChangeItem(row.id, 'ItemID', val)}
+                                        excludedIds={selectedItems.map(i => i.ItemID).filter(id => id !== '')}
                                     />
                                 </div>
 

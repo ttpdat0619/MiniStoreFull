@@ -9,6 +9,9 @@ import inventoryRoutes from "./src/routes/inventory.routes.js";
 import purchaseRequestRoutes from "./src/routes/purchaseRequest.routes.js";
 import itemRoutes from "./src/routes/item.routes.js";
 import wastageRoutes from "./src/routes/wastage.routes.js";
+import foodRoutes from "./src/routes/food.routes.js";
+import formulaRoutes from "./src/routes/formula.routes.js";
+import branchRoutes from "./src/routes/branch.routes.js";
 
 dotenv.config();
 
@@ -61,6 +64,9 @@ app.use("/api/inventory", inventoryRoutes);
 app.use("/api/purchase-request", purchaseRequestRoutes)
 app.use("/api/item", itemRoutes);
 app.use("/api/wastage", wastageRoutes);
+app.use("/api/fooditem", foodRoutes);
+app.use("/api/FoodFormula", formulaRoutes);
+app.use("/api/branch", branchRoutes);
 
 // Database connection and server start
 AppDataSource.initialize()

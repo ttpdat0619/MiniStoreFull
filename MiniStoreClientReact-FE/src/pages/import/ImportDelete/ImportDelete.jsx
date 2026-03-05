@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import importApi from '../../api/import.api';
-import './import.Page.css';
+import importApi from '../../../api/import.api';
+import './ImportDelete.css';
 
 const ImportDelete = () => {
     const { id } = useParams();
@@ -57,10 +57,20 @@ const ImportDelete = () => {
             <div className="import-content-wrapper detail-page" style={{ maxWidth: '800px' }}>
                 <button className="btn-back" onClick={() => navigate(`/import/detail/${id}`)}>← BACK TO DETAIL</button>
 
-                <div className="detail-header" style={{ marginTop: '20px', textAlign: 'center', background: 'rgba(220, 53, 69, 0.05)', padding: '30px', borderRadius: '12px', border: '1px solid #dc3545' }}>
-                    <h2 style={{ color: '#dc3545' }}>CONFIRM DELETION</h2>
-                    <p>You are about to delete order: <strong>#{String(request.RequestID || id).substring(0, 8).toUpperCase()}</strong></p>
-                    <p style={{ color: '#888', fontSize: '13px' }}>Created on: {new Date(request.CreateAt).toLocaleString()}</p>
+                <div className="detail-header" style={{ marginTop: '20px', background: 'rgba(220, 53, 69, 0.05)', padding: '25px', borderRadius: '12px', border: '1px solid #dc3545' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div style={{ textAlign: 'left' }}>
+                            <h2 style={{ color: '#dc3545', margin: 0 }}>CONFIRM DELETION</h2>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '10px' }}>
+                                <span style={{ fontSize: '14px' }}>Order: <strong>#{String(request.RequestID || id).substring(0, 8).toUpperCase()}</strong></span>
+                                <span className="branch-tag" style={{ background: '#fff5f5', color: '#e53e3e', border: '1px solid #feb2b2' }}>
+                                    📍 {request.branch?.BranchName}
+                                </span>
+                            </div>
+                            <p style={{ color: '#888', fontSize: '12px', margin: '5px 0' }}>Created on: {new Date(request.CreateAt).toLocaleString()}</p>
+                        </div>
+                        <span className="status-tag status-pending" style={{ fontSize: '14px', padding: '6px 16px', background: '#dc3545', color: 'white' }}>DELETING</span>
+                    </div>
                 </div>
 
                 <div style={{ marginTop: '30px', background: 'var(--bg-card)', padding: '20px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>

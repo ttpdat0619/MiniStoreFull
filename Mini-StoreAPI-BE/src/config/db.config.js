@@ -11,6 +11,10 @@ import { PurchaseDetailEntity } from "../entities/purchaseDetail.entity.js";
 import { ActivityLogEntity } from "../entities/activityLog.entity.js";
 import { wastageRequestEntity } from "../entities/wastageRequest.entity.js";
 import { WastageDetailEntity } from "../entities/wastageDetail.entity.js";
+import { FormulaEntity } from "../entities/formula.entity.js";
+import { CategoryEntity } from "../entities/category.entity.js";
+import { FoodItemEntity } from "../entities/foodItem.entity.js";
+import { BranchEntity } from "../entities/branch.entity.js";
 
 dotenv.config();
 
@@ -32,7 +36,11 @@ export const AppDataSource = new DataSource({
         purchaseRequestEntity,
         PurchaseDetailEntity,
         wastageRequestEntity,
-        WastageDetailEntity
+        WastageDetailEntity,
+        FormulaEntity,
+        CategoryEntity,
+        FoodItemEntity,
+        BranchEntity
     ],
     synchronize: false,
 })
