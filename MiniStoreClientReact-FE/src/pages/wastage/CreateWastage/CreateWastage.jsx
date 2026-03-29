@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./CreateWastage.page.css";
+import "./CreateWastage.css";
 import itemApi from "../../../api/item.api";
 import wastageApi from "../../../api/wastage.api";
 import branchApi from "../../../api/branch.api";
@@ -139,6 +139,7 @@ const CreateWastage = () => {
                 Reason: row.Reason
             }));
             formData.append("items", JSON.stringify(itemsPayload));
+            formData.append("branchId", selectedBranchId); // Add branchId to FormData
 
             // Append files with unique INDEXED names to guarantee 100% accurate mapping in BE
             selectedRows.forEach((row, index) => {
@@ -165,9 +166,27 @@ const CreateWastage = () => {
             <div className="create-wastage-wrapper">
                 <button className="btn-back" onClick={() => navigate('/wastage')}>← BACK</button>
 
-                <h1 style={{ textAlign: 'center', margin: '20px 0', textTransform: 'uppercase', color: '#dc3545' }}>
+                <h1 style={{ textAlign: 'center', margin: '20px 0', textTransform: 'uppercase', color: '#dc3545', fontSize: '24px', fontWeight: '800' }}>
                     Create Wastage Request
                 </h1>
+
+                {/* Branch Selection for Admin */}
+                {currentUser?.RoleName === 'Admin' && (
+                    <div style={{ marginBottom: '25px', padding: '15px', background: 'var(--bg-card)', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+                        <label className="wastage-label" style={{ marginBottom: '8px', display: 'block' }}>SELECT BRANCH FOR WASTAGE</label>
+                        <select
+                            className="wastage-input"
+                            value={selectedBranchId}
+                            onChange={(e) => setSelectedBranchId(e.target.value)}
+                            style={{ width: '100%', cursor: 'pointer' }}
+                        >
+                            <option value="">-- Choose a Branch --</option>
+                            {branches.map(b => (
+                                <option key={b.BranchID} value={b.BranchID}>{b.BranchName}</option>
+                            ))}
+                        </select>
+                    </div>
+                )}
 
                 <div className="wastage-rows-container">
                     {selectedRows.length === 0 && (

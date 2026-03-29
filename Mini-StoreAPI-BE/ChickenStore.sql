@@ -142,7 +142,7 @@ Create Table InternalTransfers
     FromBranchID varchar(200), foreign key (FromBranchID) references Branches (BranchID),
     ToBranchID varchar(200), foreign key (ToBranchID) references Branches (BranchID),
     SenderID varchar(200), foreign key (SenderID) references Users (UserID),
-    RecceiverID varchar(200), foreign key (RecceiverID) references Users (UserID),
+    ReceiverID varchar(200), foreign key (ReceiverID) references Users (UserID),
     ApproverID varchar(200), foreign key (ApproverID) references Users(UserID),
     ReceivingStatus varchar(200), foreign key (ReceivingStatus) references ImportStatus (StatusID),
     ApproveStatus varchar(200), foreign key (ApproveStatus) references ImportStatus (StatusID),
@@ -323,6 +323,13 @@ Create Table ActivityLogs
     TimeStamp datetime default current_timestamp
 );
 
-
-
-
+#1 Action can have many Branch
+Create Table ActivityLog_Branches
+(
+	LogID varchar(200),
+    BranchID varchar(200),
+    RoleInAction varchar(100), -- EX: 'Source', 'Destination', 'Affected'
+    PRIMARY KEY (LogID, BranchID),
+    FOREIGN KEY (LogID) REFERENCES ActivityLogs (LogID),
+    FOREIGN KEY (BranchID) REFERENCES Branches (BranchID)
+);

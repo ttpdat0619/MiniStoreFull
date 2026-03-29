@@ -1,0 +1,305 @@
+.edit-transfer-container {
+    padding: 24px;
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    min-height: 100vh;
+}
+
+.edit-transfer-wrapper {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: var(--bg-card);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
+}
+
+.edit-transfer-wrapper .btn-back {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-sub);
+    padding: 6px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+    margin-bottom: 15px;
+}
+
+.edit-transfer-wrapper .btn-back:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--text-main);
+}
+
+.edit-transfer-title {
+    text-align: center;
+    margin: 20px 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 24px;
+}
+
+.edit-transfer-title .badge {
+    font-size: 12px;
+    vertical-align: middle;
+    margin-left: 10px;
+    padding: 4px 12px;
+    border-radius: 20px;
+}
+
+/* Branch info cards */
+.edit-branch-info {
+    background: var(--bg-card);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    border: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.edit-branch-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.edit-branch-box {
+    flex: 1;
+    min-width: 250px;
+}
+
+.edit-branch-label {
+    font-weight: bold;
+    font-size: 13px;
+    color: var(--text-sub);
+    display: block;
+    margin-bottom: 8px;
+}
+
+.edit-branch-display {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    background: rgba(0, 0, 0, 0.03);
+    color: var(--text-sub);
+    font-size: 14px;
+    font-weight: 500;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.edit-branch-display .lock-icon {
+    font-size: 12px;
+    opacity: 0.6;
+}
+
+/* Note textarea */
+.edit-note-area {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-main);
+    color: var(--text-main);
+    font-size: 14px;
+    box-sizing: border-box;
+    min-height: 80px;
+    resize: vertical;
+    font-family: inherit;
+}
+
+/* Item cards */
+.edit-item-card {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border-left: 4px solid #ffc107;
+    padding: 15px 20px;
+    background: var(--bg-card);
+    border-radius: 0 8px 8px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.edit-item-card:hover {
+    box-shadow: 0 4px 15px rgba(255, 193, 7, 0.15);
+}
+
+.edit-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.edit-item-number {
+    font-weight: bold;
+    font-size: 14px;
+    color: #ffc107;
+}
+
+.edit-item-row {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+}
+
+.edit-item-remove {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #dc3545;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px;
+    transition: transform 0.2s;
+}
+
+.edit-item-remove:hover {
+    transform: scale(1.1);
+}
+
+/* Empty state */
+.edit-empty-state {
+    text-align: center;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    border: 1px dashed var(--border-color);
+    margin: 10px 0;
+}
+
+/* Action bar */
+.edit-action-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    margin-top: 25px;
+}
+
+.edit-action-buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 15px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 20px;
+}
+
+.btn-add-item {
+    padding: 10px 25px;
+    border-radius: 25px;
+    font-size: 13px;
+    font-weight: 600;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-add-item:hover {
+    background: rgba(255, 193, 7, 0.1);
+    border-color: #ffc107;
+}
+
+.btn-save-edit {
+    background: #ffc107;
+    color: #212529;
+    border: none;
+    box-shadow: 0 4px 10px rgba(255, 193, 7, 0.3);
+    padding: 12px 35px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-save-edit:hover {
+    background: #e0a800;
+    box-shadow: 0 6px 15px rgba(255, 193, 7, 0.4);
+}
+
+.btn-cancel-edit {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-sub);
+    padding: 8px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 13px;
+    transition: all 0.2s;
+}
+
+.btn-cancel-edit:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--text-main);
+}
+
+/* Item detail info box */
+.edit-item-info {
+    padding: 10px 15px;
+    background: rgba(255, 193, 7, 0.05);
+    border-radius: 6px;
+    font-size: 12px;
+    border: 1px dashed rgba(255, 193, 7, 0.3);
+    display: flex;
+    gap: 8px;
+}
+
+/* Total pieces badge */
+.edit-total-badge {
+    padding: 8px;
+    background: rgba(255, 193, 7, 0.1);
+    border-radius: 4px;
+    text-align: center;
+    font-weight: bold;
+    border: 1px solid #ffc107;
+    color: #856404;
+    font-size: 14px;
+    box-sizing: border-box;
+    min-height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Loading spinner */
+.edit-loading {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-sub);
+    font-size: 16px;
+}
+
+/* Compact input styles */
+.edit-compact-input {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-main);
+    color: var(--text-main);
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.edit-compact-label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 11px;
+    font-weight: bold;
+    color: var(--text-sub);
+}

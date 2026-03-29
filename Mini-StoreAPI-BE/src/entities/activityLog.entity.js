@@ -46,6 +46,11 @@ export const ActivityLogEntity = new EntitySchema({
             target: "User",
             type: "many-to-one",
             joinColumn: { name: "UserID" }
+        },
+        branches: {
+            target: "ActivityLogBranch",
+            type: "one-to-many",
+            inverseSide: "log"
         }
     }
 });

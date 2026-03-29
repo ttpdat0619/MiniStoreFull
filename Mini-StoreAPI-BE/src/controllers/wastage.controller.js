@@ -8,8 +8,9 @@ export const createWastage = async (req, res) => {
         //Item come as stringified JSON in MultipartFormData
         const items = JSON.parse(req.body.items);
         const userId = req.user.UserID;
+        const branchId = req.user.BranchID;
 
-        //Map pictures to each item object correctly
+        // ... existing logic to map pictures ...
         let fileIndex = 0;
         const itemsWithPics = items.map((item) => {
             let picturePath = null;
@@ -23,7 +24,7 @@ export const createWastage = async (req, res) => {
             };
         });
 
-        const result = await wastageService.createWastageRequest(userId, itemsWithPics);
+        const result = await wastageService.createWastageRequest(userId, branchId, itemsWithPics);
         res.status(201).json(result);
     } catch (error) {
         // CLEANUP: Delete uploaded files if DB request fails
@@ -43,8 +44,9 @@ export const getAllWastage = async (req, res) => {
     try {
         const userId = req.user.UserID;
         const roleName = req.user.RoleName;
+        const branchId = req.user.BranchID;
 
-        const data = await wastageService.getAllWastageRequests(userId, roleName);
+        const data = await wastageService.getAllWastageRequests(userId, roleName, branchId);
         res.status(200).json({ data });
     } catch (error) {
         console.error("DEBUG - GET ALL WASTAGE FAILED:", error);

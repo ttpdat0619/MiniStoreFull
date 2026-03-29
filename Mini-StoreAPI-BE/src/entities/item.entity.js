@@ -36,8 +36,7 @@ export const ItemEntity = new EntitySchema({
         unit: {
             target: "Unit",
             type: "many-to-one",
-            joinColumn: { name: "UnitID" },
-            eager: true
+            joinColumn: { name: "UnitID" }
         }
     }
 });

@@ -12,6 +12,8 @@ import wastageRoutes from "./src/routes/wastage.routes.js";
 import foodRoutes from "./src/routes/food.routes.js";
 import formulaRoutes from "./src/routes/formula.routes.js";
 import branchRoutes from "./src/routes/branch.routes.js";
+import internalTransferRoutes from "./src/routes/internalTransfer.routes.js";
+import activityLogRoutes from "./src/routes/activityLog.routes.js";
 
 dotenv.config();
 
@@ -67,6 +69,8 @@ app.use("/api/wastage", wastageRoutes);
 app.use("/api/fooditem", foodRoutes);
 app.use("/api/FoodFormula", formulaRoutes);
 app.use("/api/branch", branchRoutes);
+app.use("/api/internal-transfers", internalTransferRoutes);
+app.use("/api/activity-logs", activityLogRoutes);
 
 // Database connection and server start
 AppDataSource.initialize()

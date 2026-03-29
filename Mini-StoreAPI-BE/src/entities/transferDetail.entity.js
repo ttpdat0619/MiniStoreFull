@@ -1,15 +1,15 @@
 import { EntitySchema } from "typeorm";
 
-export const FormulaEntity = new EntitySchema({
-    name: "Formula",
-    tableName: "Formulas",
+export const TransferDetailEntity = new EntitySchema({
+    name: "TransferDetail",
+    tableName: "TransferDetails",
     columns: {
-        FormulaID: {
+        DetailID: {
             primary: true,
             type: "varchar",
             length: 200
         },
-        FoodID: {
+        TransferID: {
             type: "varchar",
             length: 200
         },
@@ -17,17 +17,18 @@ export const FormulaEntity = new EntitySchema({
             type: "varchar",
             length: 200
         },
-        QuantityUsed: {
+        Quantity: {
             type: "decimal",
             precision: 18,
             scale: 2
         }
     },
     relations: {
-        foodItem: {
-            target: "FoodItem",
+        transfer: {
+            target: "InternalTransfer",
             type: "many-to-one",
-            joinColumn: { name: "FoodID" }
+            joinColumn: { name: "TransferID" },
+            onDelete: "CASCADE"
         },
         item: {
             target: "Item",

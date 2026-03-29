@@ -1,0 +1,222 @@
+.process-wastage-container {
+    padding: 40px 20px;
+    background: var(--bg-main);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.process-wastage-card {
+    background: var(--bg-card);
+    width: 100%;
+    max-width: 800px;
+    border-radius: 20px;
+    padding: 35px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.btn-back-simple {
+    background: transparent;
+    border: none;
+    color: #888;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    margin-bottom: 25px;
+    letter-spacing: 1px;
+    transition: color 0.2s;
+}
+
+.btn-back-simple:hover {
+    color: #dc3545;
+}
+
+.process-title {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text-main);
+    text-transform: uppercase;
+}
+
+.process-subtitle {
+    color: #888;
+    margin: 8px 0 30px 0;
+    font-size: 14px;
+}
+
+.summary-section {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.summary-header {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.summary-header p {
+    margin: 0;
+}
+
+.mini-item-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.mini-item-table th {
+    text-align: left;
+    padding: 10px;
+    font-size: 11px;
+    color: #666;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.mini-item-table td {
+    padding: 12px 10px;
+    font-size: 13px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.decision-section {
+    margin-bottom: 30px;
+}
+
+.decision-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 800;
+    color: #dc3545;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+}
+
+.decision-options {
+    display: flex;
+    gap: 20px;
+}
+
+.option-card {
+    flex: 1;
+    cursor: pointer;
+    position: relative;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: all 0.3s;
+}
+
+.option-card.active.approve {
+    border-color: #28a745;
+    background: rgba(40, 167, 69, 0.05);
+}
+
+.option-card.active.reject {
+    border-color: #dc3545;
+    background: rgba(220, 53, 69, 0.05);
+}
+
+.option-card input {
+    display: none;
+}
+
+.radio-custom {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #555;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.option-card.active .radio-custom {
+    border-color: currentColor;
+}
+
+.option-card.active .radio-custom::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: currentColor;
+    border-radius: 50%;
+}
+
+.option-text strong {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 2px;
+}
+
+.option-text small {
+    color: #888;
+    font-size: 11px;
+}
+
+.reason-textarea {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 15px;
+    color: var(--text-main);
+    font-family: inherit;
+    resize: none;
+    transition: border-color 0.2s;
+}
+
+.reason-textarea:focus {
+    border-color: #dc3545;
+    outline: none;
+}
+
+.btn-confirm-process {
+    width: 100%;
+    padding: 15px;
+    border-radius: 12px;
+    border: none;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-confirm-process.approved {
+    background: #28a745;
+    color: white;
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+}
+
+.btn-confirm-process.rejected {
+    background: #dc3545;
+    color: white;
+    box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+}
+
+.btn-confirm-process:hover {
+    transform: translateY(-3px);
+}
+
+[data-theme='light'] .process-wastage-card {
+    background: #fff;
+}
+
+[data-theme='light'] .summary-section,
+[data-theme='light'] .option-card,
+[data-theme='light'] .reason-textarea {
+    background: #f8f9fa;
+}

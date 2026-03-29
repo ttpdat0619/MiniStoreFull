@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import wastageApi from '../../../api/wastage.api';
 import { getDomain } from '../../../api/axiosClient';
 import SafeImage from '../../../components/common/SafeImage';
-import './WastageDetail.page.css';
+import './WastageDetail.css';
 
 const WastageDetail = () => {
     const { id } = useParams();
@@ -59,10 +59,10 @@ const WastageDetail = () => {
             <div className="wastage-detail-wrapper">
                 <button className="btn-back" onClick={() => navigate('/wastage')}>← BACK TO LIST</button>
 
-                <div className="detail-header-card" style={{ marginTop: '20px' }}>
+                <div className="detail-header-card" style={{ marginTop: '20px', borderLeft: '6px solid #dc3545' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <div>
-                            <h2 style={{ margin: 0, textTransform: 'uppercase' }}>Wastage Order #{id.substring(0, 8)}</h2>
+                            <h2 style={{ margin: 0, textTransform: 'uppercase', fontWeight: '800' }}>Wastage Order #{id.substring(0, 8)}</h2>
                             <p style={{ color: 'var(--text-sub)', fontSize: '13px', margin: '5px 0' }}>
                                 Created: {new Date(request.CreateAt).toLocaleString()}
                             </p>
@@ -77,6 +77,7 @@ const WastageDetail = () => {
                     <div className="info-box">
                         <h4>Personnel Involvement</h4>
                         <p><strong>Requester:</strong> <span>{request.manager?.Username}</span></p>
+                        <p><strong>Branch:</strong> <span style={{ color: '#007bff', fontWeight: '600' }}>📍 {request.branch?.BranchName || 'No Branch'}</span></p>
                         <p><strong>Approver:</strong> <span>{request.approval?.Username || 'Pending...'}</span></p>
                         {request.ApprovalDate && (
                             <p><strong>Action Date:</strong> <span>{new Date(request.ApprovalDate).toLocaleString()}</span></p>

@@ -30,6 +30,9 @@ export const wastageRequestEntity = new EntitySchema({
 
         Reason: {
             type: "text", nullable: true
+        },
+        BranchID: {
+            type: "varchar", length: 200, nullable: true
         }
     },
     relations: {
@@ -55,8 +58,13 @@ export const wastageRequestEntity = new EntitySchema({
         status: {
             target: "ImportStatus",
             type: "many-to-one",
-            joinColumn: { name: "StatusID" },
-            eager: true
+            joinColumn: { name: "StatusID" }
+        },
+
+        branch: {
+            target: "Branch",
+            type: "many-to-one",
+            joinColumn: { name: "BranchID" }
         }
     }
 });

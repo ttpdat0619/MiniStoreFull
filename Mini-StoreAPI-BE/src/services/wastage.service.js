@@ -1,18 +1,17 @@
 import { v7 as uuidv7 } from "uuid"
 import { AppDataSource } from "../config/db.config"
 import { wastageRequestEntity } from "../entities/wastageRequest.entity"
-import { ActivityLogEntity } from "../entities/activityLog.entity";
 import { getStatusByName } from "../helpers/status.helper";
+import { writeActivityLog } from "../helpers/activityLog.helper";
 import { WastageDetailEntity } from "../entities/wastageDetail.entity";
 import { InventoryEntity } from "../entities/inventory.entity";
 import fs from "fs";
 import path from "path";
 
 const requestRepo = AppDataSource.getRepository(wastageRequestEntity);
-const logRepo = AppDataSource.getRepository(ActivityLogEntity);
 
 //==========SERVICE TO CREATE WASTAGE REQUEST==========
-export const createWastageRequest = async (managerId, items) => {
+export const createWastageRequest = async (managerId, branchId, items) => {
     return await AppDataSource.transaction(async (transactionEM) => {
         //Using helper to get 'Pending' status
         const pendingStatus = await getStatusByName("Pending");
@@ -22,7 +21,8 @@ export const createWastageRequest = async (managerId, items) => {
         const newRequest = transactionEM.create(wastageRequestEntity, {
             WastageID: wastageId,
             RequesterID: managerId,
-            StatusID: pendingStatus.StatusID
+            StatusID: pendingStatus.StatusID,
+            BranchID: branchId
         });
         await transactionEM.save(wastageRequestEntity, newRequest);
 
@@ -38,29 +38,34 @@ export const createWastageRequest = async (managerId, items) => {
         await transactionEM.save(WastageDetailEntity, details);
 
         //Write activity log
-        const log = logRepo.create({
-            LogID: uuidv7(),
-            UserID: managerId,
-            Action: "Create a new wastage request with evidence photos.",
-            TargetTable: "WastageRequests",
-            TargetID: wastageId,
-            TargetName: "New Wastage Order"
-        });
-
-        await transactionEM.save(ActivityLogEntity, log);
+        await writeActivityLog(
+            transactionEM,
+            managerId,
+            "Create a new wastage request with evidence photos.",
+            "WastageRequests",
+            wastageId,
+            "New Wastage Order",
+            [{ branchId: branchId, role: "Affected" }]
+        );
 
         return { wastageId };
     });
 };
 
 //==========SERVICE TO GET ALL LIST OF WASTAGE REQUEST==========
-export const getAllWastageRequests = async (userId, userRole) => {
+export const getAllWastageRequests = async (userId, userRole, branchId) => {
 
-    //Admin sees all, Managers see only their own 
-    const where = userRole === 'Admin' ? {} : { RequesterID: userId };
+    //Admin sees all (unless branch filtered), Managers see only their own branch
+    let where = {};
+    if (userRole === 'Admin') {
+        if (branchId) where.BranchID = branchId;
+    } else {
+        where.BranchID = branchId;
+    }
+
     return await requestRepo.find({
         where: where,
-        relations: ["manager", "status", "approval"],
+        relations: ["manager", "status", "approval", "branch"],
         order: { CreateAt: "DESC" }
     });
 };
@@ -137,16 +142,16 @@ export const updateWastageRequest = async (wastageId, userId, userRole, items) =
         }));
         await transactionEM.save(WastageDetailEntity, newDetails);
 
-        //Activity Loggin
-        const log = transactionEM.create(ActivityLogEntity, {
-            LogID: uuidv7(),
-            UserID: userId,
-            Action: `Update Wastage Request #${wastageId.substring(0, 8)}`,
-            TargetTable: "WastageRequest",
-            TargetID: wastageId,
-            TargetName: "Wastage Upload"
-        });
-        await transactionEM.save(ActivityLogEntity, log);
+        //Activity Logging
+        await writeActivityLog(
+            transactionEM,
+            userId,
+            `Update Wastage Request #${wastageId.substring(0, 8)}`,
+            "WastageRequests",
+            wastageId,
+            "Wastage Upload",
+            [{ branchId: request.BranchID, role: "Affected" }]
+        );
 
         //Phisical File Cleanup
         filesToDelete.forEach(filePath => {
@@ -207,16 +212,15 @@ export const deleteWastageRequest = async (wastageId, userId, userRole) => {
         await transactionEM.delete(wastageRequestEntity, { WastageID: wastageId });
 
         //Write Log Deletion
-        const log = transactionEM.create(ActivityLogEntity, {
-            LogID: uuidv7(),
-            UserID: userId,
-            Action: `Delete Wastage Request #${wastageId.substring(0, 8)}`,
-            TargetTable: "WastageRequests",
-            TargetID: wastageId,
-            TargetName: "Delete Wastage"
-        });
-
-        await transactionEM.save(ActivityLogEntity, log);
+        await writeActivityLog(
+            transactionEM,
+            userId,
+            `Delete Wastage Request #${wastageId.substring(0, 8)}`,
+            "WastageRequests",
+            wastageId,
+            "Delete Wastage",
+            [{ branchId: request.BranchID, role: "Affected" }]
+        );
 
         //Cleanup: Delete physical files from server
         filesToDelete.forEach(filePath => {
@@ -253,8 +257,14 @@ export const processWastageRequest = async (wastageId, approverId, action, reaso
         const targetStatus = await getStatusByName(action);
 
         if (action === "Approved") {
+            const branchId = request.BranchID;
             for (const detail of request.details) {
-                const inv = await transactionEM.findOne(InventoryEntity, { where: { ItemID: detail.ItemID } });
+                const inv = await transactionEM.findOne(InventoryEntity, {
+                    where: {
+                        ItemID: detail.ItemID,
+                        BranchID: branchId
+                    }
+                });
                 if (inv) {
                     //Direct deduction for wastage
                     inv.StockQuantity = Number(inv.StockQuantity) - Number(detail.Quantity);
@@ -273,15 +283,15 @@ export const processWastageRequest = async (wastageId, approverId, action, reaso
         });
 
         //Write Log
-        const log = transactionEM.create(ActivityLogEntity, {
-            LogID: uuidv7(),
-            UserID: approverId,
-            Action: `${action} Wastage Request #${wastageId.substring(0, 8)}`,
-            TargetTable: "WastageRequests",
-            TargetID: wastageId,
-            TargetName: "Process Wastage"
-        });
-        await transactionEM.save(ActivityLogEntity, log);
+        await writeActivityLog(
+            transactionEM,
+            approverId,
+            `${action} Wastage Request #${wastageId.substring(0, 8)}`,
+            "WastageRequests",
+            wastageId,
+            "Process Wastage",
+            [{ branchId: request.BranchID, role: "Affected" }]
+        );
 
         return { success: true };
     });

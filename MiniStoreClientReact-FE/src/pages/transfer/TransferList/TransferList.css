@@ -1,0 +1,138 @@
+.transfer-container {
+    padding: 24px;
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    min-height: 100vh;
+}
+
+.transfer-content-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.transfer-tabs {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 8px;
+}
+
+.tab-item {
+    padding: 8px 16px;
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--text-sub);
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.tab-item:hover {
+    color: var(--text-main);
+}
+
+.tab-item.active {
+    color: #007bff;
+    border-bottom: 3px solid #007bff;
+}
+
+.transfer-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.transfer-card {
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.transfer-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.transfer-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.transfer-id-group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.transfer-id-group h4 {
+    margin: 0;
+    color: var(--text-main);
+    font-size: 16px;
+}
+
+.transfer-info p {
+    margin: 5px 0;
+    color: var(--text-sub);
+    font-size: 14px;
+}
+
+.status-tag {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Status Colors */
+.status-pending {
+    background-color: rgba(255, 193, 7, 0.15);
+    color: #e0a800;
+}
+
+.status-approved {
+    background-color: rgba(40, 167, 69, 0.15);
+    color: #28a745;
+}
+
+.status-rejected {
+    background-color: rgba(220, 53, 69, 0.15);
+    color: #dc3545;
+}
+
+.branch-tag {
+    padding: 4px 10px;
+    border-radius: 6px;
+    background-color: var(--bg-main);
+    border: 1px solid var(--border-color);
+    font-size: 12px;
+    color: var(--text-main);
+}
+
+.btn-create-floating {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.btn-create-floating:hover {
+    background-color: #0056b3;
+    transform: translateY(-3px);
+}

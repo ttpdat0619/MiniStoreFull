@@ -1,14 +1,13 @@
 import { AppDataSource } from "../config/db.config";
-import { ActivityLogEntity } from "../entities/activityLog.entity";
 import { InventoryEntity } from "../entities/inventory.entity";
 import { PurchaseDetailEntity } from "../entities/purchaseDetail.entity";
 import { purchaseRequestEntity } from "../entities/purchaseRequest.entity";
 import { getStatusByName } from "../helpers/status.helper";
+import { writeActivityLog } from "../helpers/activityLog.helper";
 import { v7 as uuidv7 } from "uuid";
 
 const requestRepo = AppDataSource.getRepository(purchaseRequestEntity);
 const inventoryRepo = AppDataSource.getRepository(InventoryEntity);
-const logRepo = AppDataSource.getRepository(ActivityLogEntity);
 
 
 //=========GET ALL REQUESTS ==========
@@ -25,39 +24,38 @@ export const getAllRequests = async (userId, userRole, branchId) => {
 
 //==========SERVICE TO CREATE REQUEST==========
 export const createRequest = async (managerId, items, branchId) => {
+    return await AppDataSource.transaction(async (transactionEM) => {
+        const pendingStatus = await getStatusByName("Pending");
+        const requestId = uuidv7();
 
-    const pendingStatus = await getStatusByName("Pending");
+        const details = items.map(item => ({
+            DetailID: uuidv7(),
+            RequestID: requestId,
+            ItemID: item.ItemID,
+            Quantity: item.Quantity
+        }));
 
-    const requestId = uuidv7();
+        const newRequest = transactionEM.create(purchaseRequestEntity, {
+            RequestID: requestId,
+            ManagerID: managerId,
+            BranchID: branchId,
+            StatusID: pendingStatus.StatusID,
+            details: details
+        });
+        const saveRequest = await transactionEM.save(purchaseRequestEntity, newRequest);
 
-    const details = items.map(item => ({
-        DetailID: uuidv7(),
-        RequestID: requestId,
-        ItemID: item.ItemID,
-        Quantity: item.Quantity
-    }));
+        await writeActivityLog(
+            transactionEM,
+            managerId,
+            "Create a new purchase Request Items for Branch",
+            "PurchaseRequests",
+            requestId,
+            "New Purchase Order",
+            [{ branchId: branchId, role: "Affected" }]
+        );
 
-    const newRequest = requestRepo.create({
-        RequestID: requestId,
-        ManagerID: managerId,
-        BranchID: branchId, // Added BranchID
-        StatusID: pendingStatus.StatusID,
-        details: details
+        return saveRequest;
     });
-
-    const saveRequest = await requestRepo.save(newRequest);
-
-    const logEntry = logRepo.create({
-        LogID: uuidv7(),
-        UserID: managerId,
-        Action: 'Create a new purchase Request Items for Branch',
-        TargetTable: "PurchaseRequests",
-        TargetID: requestId,
-        TargetName: "New Purchase Order"
-    });
-    await logRepo.save(logEntry);
-
-    return saveRequest;
 };
 
 //==========SERVICE TO GET REQUEST DETAIL BY ID==========
@@ -122,15 +120,15 @@ export const updateRequest = async (requestId, userId, userRole, items) => {
         // Save new list
         await transactionEntityManager.save(PurchaseDetailEntity, newDetails);
         // Write Activity Log
-        const logEntry = logRepo.create({
-            LogID: uuidv7(),
-            UserID: userId,
-            Action: `Update Purchase Request #${requestId.substring(0, 8)}. Items re-configured by ${userRole}.`,
-            TargetTable: "PurchaseRequests",
-            TargetID: requestId,
-            TargetName: "Update Order"
-        });
-        await transactionEntityManager.save(ActivityLogEntity, logEntry);
+        await writeActivityLog(
+            transactionEntityManager,
+            userId,
+            `Update Purchase Request #${requestId.substring(0, 8)}. Items re-configured by ${userRole}.`,
+            "PurchaseRequests",
+            requestId,
+            "Update Order",
+            [{ branchId: request.BranchID, role: "Affected" }]
+        );
         return { message: "Purchase Request updated successfully!" };
     });
 };
@@ -139,7 +137,10 @@ export const updateRequest = async (requestId, userId, userRole, items) => {
 export const deleteRequest = async (requestId, userId, userRole) => {
 
     //Find request
-    const request = await requestRepo.findOne({ where: { RequestID: requestId } });
+    const request = await requestRepo.findOne({
+        where: { RequestID: requestId },
+        relations: ["status"]
+    });
 
     if (!request) {
         throw new Error("Purchase Request Not Found!");
@@ -173,14 +174,15 @@ export const deleteRequest = async (requestId, userId, userRole) => {
         await transactionEntityManager.delete(purchaseRequestEntity, { RequestID: requestId });
 
         //Write Log History
-        const logEntry = logRepo.create({
-            LogID: uuidv7(),
-            UserID: userId,
-            Action: `Delete Purchase Request #${requestId.substring(0, 8)}.`,
-            TargetTable: "PurchaseRequest, Purchase Detail",
-            TargetID: requestId,
-            TargetName: "Delete Order"
-        });
+        await writeActivityLog(
+            transactionEntityManager,
+            userId,
+            `Delete Purchase Request #${requestId.substring(0, 8)}.`,
+            "PurchaseRequests",
+            requestId,
+            "Delete Order",
+            [{ branchId: request.BranchID, role: "Affected" }]
+        );
     });
 }
 
@@ -246,15 +248,15 @@ export const processRequest = async (requestId, appoverId, action, reason = null
         });
 
         //----------WRITE LOG APPROVER----------
-        const logEntry = logRepo.create({
-            LogID: uuidv7(),
-            UserID: appoverId,
-            Action: "Approved purchase request and update Inventory.",
-            TargetTable: "PurchaseRequests",
-            TargetID: requestId,
-            TargetName: "New Purchase Order"
-        });
-        await logRepo.save(logEntry);
+        await writeActivityLog(
+            transactionEntityManager,
+            appoverId,
+            "Approved purchase request and update Inventory.",
+            "PurchaseRequests",
+            requestId,
+            "New Purchase Order",
+            [{ branchId: request.BranchID, role: "Affected" }]
+        );
 
         return { message: "Request approved and inventory update Success!" };
 
@@ -269,15 +271,15 @@ export const processRequest = async (requestId, appoverId, action, reason = null
         });
 
         //----------WRITE LOG IF REJECTED----------
-        const rejectLog = logRepo.create({
-            LogID: uuidv7(),
-            UserID: appoverId,
-            Action: `Rejected purchase request. Reason: ${reason}`,
-            TargetTable: "PurchaseRequests",
-            TargetID: requestId,
-            TargetName: "Rejected"
-        });
-        await logRepo.save(rejectLog);
+        await writeActivityLog(
+            AppDataSource.manager,
+            appoverId,
+            `Rejected purchase request. Reason: ${reason}`,
+            "PurchaseRequests",
+            requestId,
+            "Rejected",
+            [{ branchId: request.BranchID, role: "Affected" }]
+        );
 
         return { message: "Request Rejected Success!" }
 

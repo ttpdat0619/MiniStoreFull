@@ -13,11 +13,19 @@ import ImportDetail from './pages/import/ImportDetail/ImportDetail';
 import ImportApprove from './pages/import/ImportApprove/ImportApprove';
 import EditImport from './pages/import/EditImport/EditImport';
 import ImportDelete from './pages/import/ImportDelete/ImportDelete';
-import WastageInventory from './pages/wastage/WastageInventory/WastageInventory.page';
-import CreateWastage from './pages/wastage/CreateWastage/CreateWastage.page';
-import WastageDetail from './pages/wastage/WastageDetail/WastageDetail.page';
-import ProcessWastage from './pages/wastage/ProcessWastage/ProcessWastage.page';
-import EditWastage from './pages/wastage/EditWastage/EditWastage.page';
+import WastageInventory from './pages/wastage/WastageInventory/WastageInventory';
+import CreateWastage from './pages/wastage/CreateWastage/CreateWastage';
+import WastageDetail from './pages/wastage/WastageDetail/WastageDetail';
+import ProcessWastage from './pages/wastage/ProcessWastage/ProcessWastage';
+import EditWastage from './pages/wastage/EditWastage/EditWastage';
+import WastageDelete from './pages/wastage/WastageDelete/WastageDelete';
+
+import TransferList from './pages/transfer/TransferList/TransferList';
+import CreateTransfer from './pages/transfer/CreateTransfer/CreateTransfer';
+import TransferDetail from './pages/transfer/TransferDetail/TransferDetail';
+import EditTransfer from './pages/transfer/EditTransfer/EditTransfer';
+
+import ActivityLog from './pages/activityLog/ActivityLog';
 
 // Component phụ để xử lý hiển thị Header dựa trên Route
 const MainLayout = ({ currentUser, theme, toggleTheme, children }) => {
@@ -84,6 +92,15 @@ function App() {
                     <Route path="/wastage/detail/:id" element={<WastageDetail />} />
                     <Route path="/wastage/process/:id" element={<ProcessWastage />} />
                     <Route path="/wastage/edit/:id" element={<EditWastage />} />
+                    <Route path="/wastage/delete/:id" element={<WastageDelete />} />
+
+                    <Route path="/transfer" element={<TransferList />} />
+                    <Route path="/transfer/create" element={<CreateTransfer />} />
+                    <Route path="/transfer/detail/:id" element={<TransferDetail />} />
+                    <Route path="/transfer/edit/:id" element={<EditTransfer />} />
+
+                    <Route path="/activity-logs" element={<ActivityLog />} />
+
                     <Route path="/admin" element={<h1>Admin Dashboard Content</h1>} />
                     <Route path="/manager" element={<h1>Manager Dashboard Content</h1>} />
                     <Route path="/staff" element={<h1>Staff Dashboard Content</h1>} />

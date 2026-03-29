@@ -98,6 +98,9 @@ const Header = ({ user, theme, toggleTheme }) => {
                                 <button onClick={() => navigate('/wastage')}>
                                     Wastage Dashboard
                                 </button>
+                                <button onClick={() => navigate('/transfer')}>
+                                    Transfer Dashboard
+                                </button>
                             </div>
                         </div>
                     </>
@@ -131,6 +134,9 @@ const Header = ({ user, theme, toggleTheme }) => {
                                 <button onClick={() => navigate('/wastage')}>
                                     Wastage Dashboard
                                 </button>
+                                <button onClick={() => navigate('/transfer')}>
+                                    Transfer Dashboard
+                                </button>
                             </div>
                         </div>
                     </>
@@ -144,6 +150,15 @@ const Header = ({ user, theme, toggleTheme }) => {
             </nav>
 
             <div className="header-right">
+                {(role === 'Admin' || role === 'Manager') && (
+                    <button
+                        onClick={() => navigate('/activity-logs')}
+                        title="System Activity Logs"
+                        style={{ fontSize: '20px', background: 'none', border: 'none', cursor: 'pointer', padding: '5px' }}
+                    >
+                        📋
+                    </button>
+                )}
                 <button
                     onClick={toggleTheme}
                     style={{ fontSize: '20px', background: 'none', border: '1px solid var(--border-color)', borderRadius: '50%', padding: '5px 10 px' }}

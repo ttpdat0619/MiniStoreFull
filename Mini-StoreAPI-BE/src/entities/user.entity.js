@@ -55,14 +55,12 @@ export const UserEntity = new EntitySchema({
         role: {
             target: "Role",
             type: "many-to-one",
-            joinColumn: { name: "RoleID" },
-            eager: true // Auto load role when fetching user
+            joinColumn: { name: "RoleID" }
         },
         branch: {
             target: "Branch",
             type: "many-to-one",
-            joinColumn: { name: "BranchID" },
-            eager: true
+            joinColumn: { name: "BranchID" }
         }
     }
 });

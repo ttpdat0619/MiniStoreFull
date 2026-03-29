@@ -36,8 +36,7 @@ export const FoodItemEntity = new EntitySchema({
         category: {
             target: "Category",
             type: "many-to-one",
-            joinColumn: { name: "CategoryID" },
-            eager: true
+            joinColumn: { name: "CategoryID" }
         }
     }
 });

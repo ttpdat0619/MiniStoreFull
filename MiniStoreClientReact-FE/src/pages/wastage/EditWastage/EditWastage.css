@@ -1,0 +1,300 @@
+.edit-wastage-container {
+    padding: 30px 20px;
+    background-color: var(--bg-main);
+    min-height: 100vh;
+}
+
+.edit-wastage-wrapper {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.edit-header-section {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.edit-header-section h1 {
+    font-size: 24px;
+    font-weight: 800;
+    color: #dc3545;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.request-meta {
+    font-size: 13px;
+    color: #888;
+    font-family: monospace;
+    margin-bottom: 15px;
+}
+
+.btn-back {
+    background: transparent;
+    border: none;
+    color: #555;
+    font-weight: 700;
+    font-size: 12px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-back:hover {
+    color: #dc3545;
+}
+
+/* Item Card */
+.wastage-item-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s;
+}
+
+.wastage-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 15px;
+}
+
+.item-index {
+    font-weight: 800;
+    color: #007bff;
+    font-size: 16px;
+}
+
+.wastage-btn-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 800;
+    transition: opacity 0.2s;
+}
+
+.wastage-btn-icon:hover {
+    opacity: 0.7;
+}
+
+.wastage-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #888;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.wastage-grid {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.grid-main {
+    flex: 4;
+    min-width: 250px;
+}
+
+.grid-unit {
+    width: 100px;
+}
+
+.grid-qty {
+    width: 120px;
+}
+
+.grid-photo {
+    width: 100px;
+    text-align: center;
+}
+
+.wastage-input {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-main);
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.2s;
+}
+
+.wastage-input:focus {
+    border-color: #dc3545;
+    outline: none;
+}
+
+.wastage-input.readonly {
+    background: rgba(0, 0, 0, 0.1);
+    color: #888;
+    border-style: dashed;
+}
+
+/* Photo Edit Container */
+.photo-edit-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.photo-preview-wrapper {
+    width: 70px;
+    height: 70px;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    background: #000;
+}
+
+.photo-preview-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.photo-preview-wrapper:hover .photo-preview-img {
+    transform: scale(1.1);
+}
+
+.preview-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    font-size: 9px;
+    padding: 3px 0;
+    font-weight: 800;
+    text-transform: uppercase;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.photo-preview-wrapper:hover .preview-overlay {
+    opacity: 1;
+}
+
+.photo-empty {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: #333;
+}
+
+.btn-change-photo {
+    padding: 4px 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 800;
+    color: #888;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.2s;
+}
+
+.btn-change-photo:hover {
+    border-color: #dc3545;
+    color: #dc3545;
+    background: rgba(220, 53, 69, 0.05);
+}
+
+/* Actions */
+.btn-add-item {
+    padding: 12px 30px;
+    background: transparent;
+    border: 2px solid #007bff;
+    color: #007bff;
+    border-radius: 30px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-add-item:hover {
+    background: #007bff;
+    color: white;
+}
+
+.btn-submit-wastage {
+    padding: 15px 60px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+    transition: all 0.3s;
+}
+
+.btn-submit-wastage:hover {
+    background: #218838;
+    transform: translateY(-2px);
+}
+
+.error-text {
+    color: #dc3545;
+    font-size: 10px;
+    font-weight: 700;
+    margin-top: 4px;
+    display: block;
+}
+
+/* Modal */
+.img-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    cursor: zoom-out;
+}
+
+.img-modal img {
+    max-width: 85%;
+    max-height: 85%;
+    border-radius: 12px;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme='light'] .wastage-item-card {
+    background: #fff;
+}
+
+[data-theme='light'] .wastage-input {
+    background: #f8f9fa;
+    color: #333;
+}
+
+[data-theme='light'] .photo-preview-wrapper {
+    background: #eee;
+}
+
+[data-theme='light'] .btn-change-photo {
+    background: #fff;
+}

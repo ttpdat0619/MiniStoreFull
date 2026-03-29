@@ -1,0 +1,223 @@
+.create-wastage-container {
+    padding: 30px 20px;
+    background-color: var(--bg-main);
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+.create-wastage-wrapper {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.wastage-rows-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.wastage-item-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.wastage-item-card:hover {
+    border-color: #dc3545;
+}
+
+.wastage-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.wastage-item-index {
+    font-weight: 800;
+    font-size: 14px;
+    color: #dc3545;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.wastage-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #888;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.wastage-row-1 {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+    align-items: flex-start;
+}
+
+.wastage-row-2 {
+    display: flex;
+    gap: 20px;
+}
+
+.wastage-input {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-main);
+    font-size: 14px;
+    box-sizing: border-box;
+    transition: all 0.2s;
+}
+
+.wastage-input:focus {
+    border-color: #dc3545;
+    background: rgba(220, 53, 69, 0.05);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+
+.wastage-input.invalid {
+    border-color: #ff4d4f;
+    background: rgba(255, 77, 79, 0.05);
+}
+
+.invalid-select .searchable-select-container {
+    border: 1px solid #ff4d4f;
+    border-radius: 8px;
+}
+
+.wastage-unit-display {
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 14px;
+    color: #aaa;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* Photo Upload */
+.wastage-photo-upload {
+    display: block;
+    width: 60px;
+    height: 60px;
+    border: 2px dashed var(--border-color);
+    border-radius: 12px;
+    cursor: pointer;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.wastage-photo-upload:hover {
+    border-color: #dc3545;
+    background: rgba(220, 53, 69, 0.05);
+}
+
+.wastage-photo-upload.invalid {
+    border-color: #ff4d4f;
+}
+
+.wastage-photo-placeholder {
+    font-size: 24px;
+    opacity: 0.5;
+}
+
+.wastage-photo-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Buttons */
+.btn-back {
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    color: #aaa;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-back:hover {
+    background: #333;
+    color: white;
+}
+
+.btn-add-wastage {
+    padding: 12px 25px;
+    background: transparent;
+    border: 2px dashed #dc3545;
+    color: #dc3545;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 30px;
+}
+
+.btn-add-wastage:hover {
+    background: rgba(220, 53, 69, 0.05);
+    transform: scale(1.02);
+}
+
+.create-wastage-footer {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 30px 0;
+    border-top: 1px solid var(--border-color);
+}
+
+.btn-submit-wastage {
+    padding: 12px 40px;
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+    transition: all 0.3s;
+}
+
+.btn-submit-wastage:hover {
+    background: #c82333;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4);
+}
+
+.btn-submit-wastage:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+[data-theme='light'] .wastage-item-card {
+    background: #fff;
+}
+
+[data-theme='light'] .wastage-input {
+    background: #f8f9fa;
+    color: #333;
+}

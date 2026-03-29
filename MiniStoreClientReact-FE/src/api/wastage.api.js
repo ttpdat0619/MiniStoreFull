@@ -32,6 +32,11 @@ const wastageApi = {
                 "Content-Type": "multipart/form-data"
             }
         });
+    },
+
+    // Delete a wastage request (within 72h limit)
+    deleteWastage: (wastageId) => {
+        return axiosClient.delete(`/wastage/Delete-Request/${wastageId}`);
     }
 };
 

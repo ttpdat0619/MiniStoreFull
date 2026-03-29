@@ -1,10 +1,9 @@
 import { FormulaEntity } from "../entities/formula.entity";
-import { ActivityLogEntity } from "../entities/activityLog.entity";
+import { writeActivityLog } from "../helpers/activityLog.helper";
 import { v7 as uuidv7 } from "uuid";
 import { AppDataSource } from "../config/db.config";
 
 const formulaRepo = AppDataSource.getRepository(FormulaEntity);
-const logRepo = AppDataSource.getRepository(ActivityLogEntity);
 
 //========== Service Take list of Formula==========
 export const getFormulaByFoodId = async (foodId) => {
@@ -26,15 +25,14 @@ export const createFormula = async (foodId, items, userId) => {
         const result = await transactionEM.save(FormulaEntity, formulas);
 
         //Write Log 
-        const logEntry = logRepo.create({
-            LogID: uuidv7(),
-            UserID: userId,
-            Action: `Create new formula for FoodId: ${foodId}`,
-            TargetTable: "Formulas",
-            TargetID: foodId,
-            TargetName: "Formula Create"
-        });
-        await transactionEM.save(ActivityLogEntity, logEntry);
+        await writeActivityLog(
+            transactionEM,
+            userId,
+            `Create new formula for FoodId: ${foodId}`,
+            "Formulas",
+            foodId,
+            "Formula Create"
+        );
 
         return result;
     });
@@ -73,15 +71,14 @@ export const updateFormula = async (foodId, newItems, userId) => {
             await transactionEM.save(FormulaEntity, newEntries);
         }
 
-        const logEntry = logRepo.create({
-            LogID: uuidv7(),
-            UserID: userId,
-            Action: `Update formula for FoodID: ${foodId}. Sync items.`,
-            TargetName: "Fomulas",
-            TargetID: foodId,
-            TargetName: "Formula Update"
-        });
-        await transactionEM.save(ActivityLogEntity, logEntry);
+        await writeActivityLog(
+            transactionEM,
+            userId,
+            `Update formula for FoodID: ${foodId}. Sync items.`,
+            "Formulas",
+            foodId,
+            "Formula Update"
+        );
 
         return await transactionEM.find(FormulaEntity, {
             where: { FoodID: foodId },

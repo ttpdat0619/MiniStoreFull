@@ -15,6 +15,9 @@ import { FormulaEntity } from "../entities/formula.entity.js";
 import { CategoryEntity } from "../entities/category.entity.js";
 import { FoodItemEntity } from "../entities/foodItem.entity.js";
 import { BranchEntity } from "../entities/branch.entity.js";
+import { InternalTransferEntity } from "../entities/internalTransfer.entity.js";
+import { TransferDetailEntity } from "../entities/transferDetail.entity.js";
+import { ActivityLogBranchEntity } from "../entities/activityLogBranch.entity.js";
 
 dotenv.config();
 
@@ -40,7 +43,10 @@ export const AppDataSource = new DataSource({
         FormulaEntity,
         CategoryEntity,
         FoodItemEntity,
-        BranchEntity
+        BranchEntity,
+        InternalTransferEntity,
+        TransferDetailEntity,
+        ActivityLogBranchEntity
     ],
     synchronize: false,
 })

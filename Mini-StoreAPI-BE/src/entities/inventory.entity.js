@@ -47,14 +47,12 @@ export const InventoryEntity = new EntitySchema({
         item: {
             target: "Item",
             type: "one-to-one",
-            joinColumn: { name: "ItemID" },
-            eager: true
+            joinColumn: { name: "ItemID" }
         },
         branch: {
             target: "Branch",
             type: "many-to-one",
-            joinColumn: { name: "BranchID" },
-            eager: true
+            joinColumn: { name: "BranchID" }
         }
     }
 });

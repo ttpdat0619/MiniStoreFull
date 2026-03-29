@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import wastageApi from '../../../api/wastage.api';
-import './ProcessWastage.page.css';
+import './ProcessWastage.css';
 
 const ProcessWastage = () => {
     const { id } = useParams();
@@ -61,6 +61,7 @@ const ProcessWastage = () => {
                 <div className="summary-section">
                     <div className="summary-header">
                         <p><strong>Requester:</strong> {request?.manager?.Username}</p>
+                        <p><strong>Branch:</strong> <span style={{ color: '#007bff' }}>📍 {request?.branch?.BranchName || 'No Branch'}</span></p>
                         <p><strong>Total Items:</strong> {request?.details?.length}</p>
                     </div>
 

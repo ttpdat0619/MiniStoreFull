@@ -1,0 +1,81 @@
+.transfer-container {
+    padding: 24px;
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    min-height: 100vh;
+}
+
+.transfer-content-wrapper {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: var(--bg-card);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
+}
+
+.btn-back {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-sub);
+    padding: 6px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+    margin-bottom: 15px;
+}
+
+.btn-back:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--text-main);
+}
+
+.btn-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    transition: transform 0.2s;
+}
+
+.btn-icon:hover {
+    transform: scale(1.1);
+}
+
+.transfer-card {
+    transition: all 0.3s ease;
+}
+
+.transfer-card:hover {
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.15) !important;
+}
+
+.tab-item {
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.tab-item:hover {
+    opacity: 0.8;
+}
+
+/* Compact input styles replicating CreateImport */
+.compact-label {
+    margin-bottom: 6px;
+    font-size: 11px;
+    font-weight: bold;
+    color: var(--text-sub);
+}
+
+.compact-input {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-main);
+    color: var(--text-main);
+    font-size: 14px;
+    box-sizing: border-box;
+}

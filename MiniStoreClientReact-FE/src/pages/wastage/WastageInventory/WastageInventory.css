@@ -1,0 +1,327 @@
+.wastage-container {
+    padding: 30px 20px;
+    background-color: var(--bg-main);
+    min-height: 100vh;
+}
+
+.wastage-content-wrapper {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* Header & Filters */
+.wastage-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+    gap: 40px;
+    /* Large gap to prevent overlapping */
+}
+
+.wastage-title {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--text-main);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    flex-shrink: 0;
+}
+
+.wastage-filters {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    flex-wrap: nowrap;
+    margin-left: auto;
+    /* Push filters to the right */
+}
+
+.search-container {
+    position: relative;
+    width: 250px;
+    /* User defined width */
+    flex-shrink: 0;
+    margin-right: 45px;
+    /* Shift search LEFT by pushing branch away */
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px 45px 12px 25px;
+    border-radius: 40px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+    color: var(--text-main);
+    font-size: 14px;
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.search-input:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 15px rgba(220, 53, 69, 0.3);
+}
+
+.search-icon {
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.7;
+    pointer-events: none;
+    font-size: 18px;
+}
+
+.branch-filter-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--bg-card);
+    padding: 8px 18px;
+    border-radius: 15px;
+    border: 1px solid var(--border-color);
+    position: relative;
+    min-width: 220px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Dropdown arrow replacement */
+.branch-filter-container::after {
+    content: '▼';
+    font-size: 10px;
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.filter-label {
+    font-size: 12px;
+    font-weight: 800;
+    color: #666;
+    text-transform: uppercase;
+    white-space: nowrap;
+    letter-spacing: 0.5px;
+}
+
+.branch-select {
+    background: transparent;
+    border: none;
+    color: var(--text-main) !important;
+    font-size: 14px;
+    font-weight: 700;
+    outline: none;
+    cursor: pointer;
+    flex: 1;
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 25px;
+}
+
+/* EXTREME CONTRAST FIX FOR DROPDOWN OPTIONS */
+.branch-select option {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    padding: 12px;
+    font-size: 14px;
+}
+
+[data-theme='dark'] .branch-select option {
+    background-color: #1a1a1a !important;
+    color: #ffffff !important;
+}
+
+/* Light mode specific filter labels */
+[data-theme='light'] .filter-label {
+    color: #444;
+}
+
+/* Tab Switching */
+.wastage-tabs {
+    display: flex;
+    border-bottom: 2px solid var(--border-color);
+    margin-bottom: 30px;
+}
+
+.wastage-tab-item {
+    padding: 15px 40px;
+    cursor: pointer;
+    background: transparent;
+    color: #888;
+    font-weight: 700;
+    transition: all 0.3s;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.wastage-tab-item:hover {
+    color: #ccc;
+}
+
+.wastage-tab-item.active {
+    color: #dc3545;
+    border-bottom: 2px solid #dc3545;
+}
+
+/* List Items */
+.wastage-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.wastage-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 25px;
+    border-radius: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.wastage-card:hover {
+    transform: translateY(-3px);
+    border-color: #dc3545;
+    box-shadow: 0 10px 25px rgba(220, 53, 69, 0.15);
+}
+
+.wastage-id-group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.wastage-info h4 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--text-main);
+}
+
+.wastage-info p {
+    margin: 10px 0 0 0;
+    font-size: 13px;
+    color: #888;
+}
+
+.wastage-status-tag {
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.wastage-status-pending {
+    background: rgba(255, 193, 7, 0.1);
+    color: #ffc107;
+}
+
+.wastage-status-approved {
+    background: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+}
+
+.wastage-status-rejected {
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+}
+
+.wastage-branch-tag {
+    font-size: 12px;
+    color: #007bff;
+    background: rgba(0, 123, 255, 0.1);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 700;
+}
+
+.wastage-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.wastage-btn-icon {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 18px;
+}
+
+.wastage-btn-icon:hover {
+    background: #dc3545;
+    color: white;
+    border-color: #dc3545;
+}
+
+/* Floating Create Button */
+.btn-create-wastage-floating {
+    position: fixed;
+    right: 40px;
+    bottom: 40px;
+    padding: 15px 35px;
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-weight: 800;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    box-shadow: 0 8px 30px rgba(220, 53, 69, 0.4);
+    transition: all 0.3s;
+    z-index: 1000;
+}
+
+.btn-create-wastage-floating:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 12px 40px rgba(220, 53, 69, 0.5);
+}
+
+[data-theme='light'] .wastage-card {
+    background: #fff;
+}
+
+[data-theme='light'] .search-input {
+    background: #f8f9fa;
+}
+
+[data-theme='light'] .branch-filter-container {
+    background: #f8f9fa;
+}
+
+@media (max-width: 768px) {
+    .wastage-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .wastage-filters {
+        width: 100%;
+    }
+
+    .search-container {
+        width: 100%;
+    }
+}

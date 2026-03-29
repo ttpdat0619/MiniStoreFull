@@ -67,8 +67,7 @@ export const purchaseRequestEntity = new EntitySchema({
         status: {
             target: "ImportStatus",
             type: "many-to-one",
-            joinColumn: { name: "StatusID" },
-            eager: true
+            joinColumn: { name: "StatusID" }
         },
         branch: {
             target: "Branch",
